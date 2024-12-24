@@ -238,7 +238,7 @@ print("Mean Score:", scores.mean())
 
 ### 7. **References and Resources**
 1. [scikit-learn Tutorials](https://scikit-learn.org/stable/tutorial/index.html)  
-2. [Machine Learning in Python from scratch](https://placeholder_link.com)  
+2. [Linear Regression in Python from scratch](Linear-Regression.md)  
 3. [Gradient Boosting with XGBoost Documentation](https://xgboost.readthedocs.io/en/stable/)  
 4. [Comprehensive Guide to LightGBM](https://lightgbm.readthedocs.io/en/latest/)  
 
