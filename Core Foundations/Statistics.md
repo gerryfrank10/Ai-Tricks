@@ -1,4 +1,4 @@
-# 📊 Statistics Hacktricks
+# 📊 Statistics AITricks
 
 Statistics is a field of mathematics used for data collection, analysis, interpretation, and presentation. It plays a vital role in data science, machine learning, and real-world problem-solving.
 
