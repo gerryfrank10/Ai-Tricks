@@ -33,7 +33,7 @@ This wiki is organized into several sections for easy navigation. Here is a gene
 - Learn the generic flow of the **Machine Learning Lifecycle**.
 - Explore practical tricks for common ML tasks like **data preprocessing**, **feature engineering**, **model selection**, and **hyperparameter tuning**.
 - Dive into different ML algorithms (e.g., Linear Regression, Random Forest, Gradient Boosting, etc.).
-  - [Explore More](Machine%20Learning/ML-Algorithms.md)
+  - [Explore More](Machine%20Learning/Generic-Methodology.md)
 
 ---
 
@@ -48,7 +48,7 @@ This wiki is organized into several sections for easy navigation. Here is a gene
 - Discover tricks to train deep neural networks efficiently, from **model initialization** to avoiding **overfitting**.
 - Learn about cutting-edge architectures like **CNNs**, **RNNs**, **transformers**, and **GANs**.
 - Find pre-trained models and hands-on tricks for **transfer learning**.
-  - [Discover Deep Learning Tricks](DeepLearning/Deep-Learning-Tricks.md)
+  - [Discover Deep Learning Tricks](Deep%20Learning/Introduction.md)
 
 ---
 
@@ -56,14 +56,14 @@ This wiki is organized into several sections for easy navigation. Here is a gene
 - Master **descriptive statistics**, **inferential statistics**, and **probability** with practical examples.
 - Explore common distributions like **Binomial**, **Normal**, and **Poisson** distributions.
 - Learn hypothesis testing, correlation analysis, and regression modeling tricks.
-  - [Browse Statistics Section](Statistics/Quick-Stat-Tricks.md)
+  - [Browse Statistics Section](Core%20Foundations/Statistics.md)
 
 ---
 
 ### 🕵️ **AI for Optimization**
 - Dive into **metaheuristic algorithms** like **Genetic Algorithms**, **Particle Swarm Optimization**, **Simulated Annealing**, etc., to solve complex optimization problems.
 - Learn how to combine search and optimization functions efficiently.
-  - [Tricks for Optimization](Optimization/Optimization-Tricks.md)
+  - [Tricks for Optimization](Search%20And%20Optimization/General.md)
 
 ---
 
