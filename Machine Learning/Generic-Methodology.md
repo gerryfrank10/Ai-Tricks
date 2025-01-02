@@ -96,9 +96,9 @@ Model selection is the process of picking the best algorithm/framework for the t
 
 **Key Considerations**:
 - For classification:
-  - Logistic Regression, Decision Trees, Random Forests, etc.
+  - [Logistic Regression](Logistic-Regression.md),[Decision Trees](Decision-Trees.md), [Random Forests](Random-Forest.md), etc.
 - For regression:
-  - Linear Regression, Gradient Boosting, etc.
+  - [Linear Regression](Linear-Regression.md), Gradient Boosting, etc.
 - For image/text data:
   - Deep Learning Models like CNNs or transformers.
 
