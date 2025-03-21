@@ -9,6 +9,9 @@ This wiki aims to provide **bite-sized tricks**, **frameworks**, and **examples*
 
 ---
 
+## **For Latest Events**
+For all latest Events and Talks check them [here](TALKS.md) 
+
 ## 🌟 **Getting Started**
 
 1. **Follow the Flow**:
