@@ -83,6 +83,90 @@ This wiki is organized into several sections for easy navigation. Here is a gene
 
 ---
 
+## 🆕 **New Topics**
+
+---
+
+### 🎯 **Prompt Engineering**
+- Master the art of designing prompts that get the best out of LLMs.
+- Covers zero-shot, few-shot, Chain-of-Thought, ReAct, meta-prompting, and prompt injection defenses.
+- Practical Python examples with Claude, OpenAI, and open-source models.
+  - [Explore Prompt Engineering](Prompt-Engineering/README.md)
+
+---
+
+### 🔍 **RAG — Retrieval-Augmented Generation**
+- Build knowledge-grounded AI systems that retrieve relevant documents before generating answers.
+- Full pipeline: document ingestion, chunking, embedding, vector search, and generation.
+- Advanced patterns: HyDE, multi-query, contextual compression, hybrid search.
+  - [Build RAG Pipelines](RAG/README.md)
+
+---
+
+### 🔥 **Fine-Tuning LLMs**
+- Customize large language models for specific tasks and domains.
+- Covers LoRA, QLoRA, full fine-tuning, dataset preparation, and serving fine-tuned models.
+- GPU-efficient training with bitsandbytes, PEFT, and TRL.
+  - [Fine-Tune LLMs](Fine-Tuning/README.md)
+
+---
+
+### 🗄️ **Vector Databases & Embeddings**
+- Store and search high-dimensional embeddings at scale for semantic search and RAG.
+- Hands-on guides for Pinecone, ChromaDB, Weaviate, and pgvector.
+- Includes CLIP for cross-modal (image+text) search and similarity metrics deep dive.
+  - [Master Vector Databases](Vector-Databases/README.md)
+
+---
+
+### 🚀 **MLOps & Model Deployment**
+- Take ML models from notebooks to production with experiment tracking, CI/CD, and monitoring.
+- MLflow, Docker, FastAPI serving, BentoML, GitHub Actions pipelines.
+- Drift detection, feature stores, and prediction monitoring.
+  - [Deploy ML Models](MLOps/README.md)
+
+---
+
+### 🛡️ **AI Security & Red Teaming**
+- Understand and defend against adversarial attacks, prompt injection, model extraction, and data poisoning.
+- Practical implementations of FGSM, PGD attacks, differential privacy, and adversarial training.
+- Red teaming frameworks for LLM applications.
+  - [Secure AI Systems](AI-Security/README.md)
+
+---
+
+### 🎨 **Generative AI & Diffusion Models**
+- From theory to practice: diffusion models, GANs, VAEs, and text-to-audio.
+- Stable Diffusion, ControlNet, image-to-image, inpainting — all with code.
+- FID evaluation, sampling strategies, and classifier-free guidance.
+  - [Generate with AI](Generative-AI/README.md)
+
+---
+
+### 👁️ **Multimodal AI**
+- Build systems that reason across text, images, audio, and video simultaneously.
+- Vision-language models with Claude, CLIP for cross-modal search, document understanding.
+- Video frame analysis, speech-to-text pipelines, and multimodal RAG.
+  - [Build Multimodal Apps](Multimodal-AI/README.md)
+
+---
+
+### 🤖 **AI Agents & Tool Use**
+- Design autonomous agents that plan, use tools, and complete multi-step tasks.
+- ReAct loop, multi-agent orchestration, memory systems, and production hardening.
+- Full implementation with Claude's tool use API, LangGraph, and rate limiting.
+  - [Build AI Agents](AI-Agents/README.md)
+
+---
+
+### 🔒 **AI for Cybersecurity**
+- Apply ML to detect threats, classify malware, analyze logs, and automate threat intelligence.
+- UEBA, network intrusion detection, LLM-powered SIEM, and vulnerability triage.
+- Bridges the gap between AI/ML and traditional security operations.
+  - [AI-Powered Security](AI-for-Cybersecurity/README.md)
+
+---
+
 ## 🛠 **Tips and Tricks for Success**
 
 1. **Follow Frameworks**:
@@ -120,10 +204,20 @@ AI Tricks equips you with tools to dive head-first into areas such as:
 
 Here are some quick links to dive into specific sections:
 - [Machine Learning Lifecycle](Machine%20Learning/Generic-Methodology.md)
-- [Deep Learning Techniques](DeepLearning/Deep-Learning-Tricks.md)
-- [Understand Statistics](Statistics/Quick-Stat-Tricks.md)
-- [NLP Tricks](NLP/NLP-Tricks.md)
-- [Optimization Techniques](Optimization/Optimization-Tricks.md)
+- [Deep Learning Techniques](Deep%20Learning/Introduction.md)
+- [Understand Statistics](Core%20Foundations/Statistics.md)
+- [NLP Tricks](Natural%20Language%20Processing/Text-Preprocessing.md)
+- [Optimization Techniques](Search%20And%20Optimization/General.md)
+- [Prompt Engineering](Prompt-Engineering/README.md)
+- [RAG Pipelines](RAG/README.md)
+- [Fine-Tuning LLMs](Fine-Tuning/README.md)
+- [Vector Databases](Vector-Databases/README.md)
+- [MLOps & Deployment](MLOps/README.md)
+- [AI Security](AI-Security/README.md)
+- [Generative AI](Generative-AI/README.md)
+- [Multimodal AI](Multimodal-AI/README.md)
+- [AI Agents](AI-Agents/README.md)
+- [AI for Cybersecurity](AI-for-Cybersecurity/README.md)
 
 ---
 
@@ -144,8 +238,9 @@ Together, we can build the ultimate AI Tricks repository!
 Stay tuned as we expand AI Tricks with:
 - Real-world project templates.
 - Advanced NLP workflows with transformers.
-- Tricks for scaling AI applications in production.
-- In-depth use cases for **MLOps** and **AI Ethics**.
+- LLMOps — monitoring and maintaining LLM-powered applications.
+- Responsible AI — bias detection, fairness, and model cards.
+- AI in Healthcare, Finance, and Legal — domain-specific deep dives.
 
 ---
 
