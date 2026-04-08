@@ -1,0 +1,213 @@
+site_name: AI Tricks
+site_url: https://gerryfrank10.github.io/Ai-Tricks/
+site_description: Your practical reference for AI, Machine Learning, LLMs, Agents, and more — like HackTricks, but for AI.
+site_author: AI Tricks Community
+repo_url: https://github.com/gerryfrank10/Ai-Tricks
+repo_name: gerryfrank10/Ai-Tricks
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  custom_dir: docs/overrides
+  logo: assets/logo.png
+  favicon: assets/logo.png
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - scheme: slate
+      primary: deep purple
+      accent: cyan
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.tracking
+    - navigation.instant
+    - navigation.instant.progress
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - content.tooltips
+    - header.autohide
+    - announce.dismiss
+  icon:
+    repo: fontawesome/brands/github
+    admonition:
+      note: octicons/tag-16
+      tip: octicons/squirrel-16
+      warning: octicons/alert-16
+      danger: octicons/zap-16
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/gerryfrank10/Ai-Tricks
+      name: AI Tricks on GitHub
+  generator: false
+  analytics:
+    provider: google
+    property: ""
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/ask-docs.js
+
+plugins:
+  - search:
+      separator: '[\s\-\.]+'
+      lang: en
+  - tags
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.arithmatex:
+      generic: true
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - def_list
+  - toc:
+      permalink: true
+      title: On this page
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+
+  - Foundations:
+    - foundations/index.md
+    - Mathematics:
+      - Linear Algebra: foundations/mathematics/linear-algebra.md
+      - Calculus & Autodiff: foundations/mathematics/calculus.md
+      - Optimization Theory: foundations/mathematics/optimization.md
+    - Statistics: foundations/statistics.md
+    - Probability: foundations/probability.md
+    - Programming:
+      - Python for AI: foundations/programming/python.md
+      - ML Frameworks: foundations/programming/frameworks.md
+
+  - Machine Learning:
+    - machine-learning/index.md
+    - ML Lifecycle: machine-learning/lifecycle.md
+    - Supervised Learning:
+      - Linear Regression: machine-learning/supervised/linear-regression.md
+      - Logistic Regression: machine-learning/supervised/logistic-regression.md
+      - Decision Trees: machine-learning/supervised/decision-trees.md
+      - Random Forest: machine-learning/supervised/random-forest.md
+      - Support Vector Machines: machine-learning/supervised/svm.md
+    - Unsupervised Learning: machine-learning/unsupervised.md
+
+  - Deep Learning:
+    - deep-learning/index.md
+    - Neural Networks: deep-learning/neural-networks.md
+    - Convolutional Networks: deep-learning/cnn.md
+    - Recurrent Networks & LSTMs: deep-learning/rnn.md
+    - Transformers: deep-learning/transformers.md
+    - Transfer Learning: deep-learning/transfer-learning.md
+    - Autoencoders & GANs: deep-learning/autoencoders-gans.md
+    - Optimization Techniques: deep-learning/optimization.md
+
+  - LLMs & Agents:
+    - llm/index.md
+    - Prompt Engineering: llm/prompt-engineering.md
+    - RAG: llm/rag.md
+    - Fine-Tuning: llm/fine-tuning.md
+    - AI Agents: llm/agents.md
+    - Vector Databases: llm/vector-databases.md
+
+  - Generative AI:
+    - generative-ai/index.md
+    - Diffusion Models: generative-ai/diffusion-models.md
+    - Multimodal AI: generative-ai/multimodal.md
+
+  - NLP:
+    - nlp/index.md
+    - Text Preprocessing: nlp/text-preprocessing.md
+    - Sentiment Analysis: nlp/sentiment-analysis.md
+
+  - Computer Vision:
+    - computer-vision/index.md
+    - Image Classification: computer-vision/image-classification.md
+
+  - Data:
+    - data/index.md
+    - EDA: data/eda.md
+    - Feature Engineering: data/feature-engineering.md
+    - Data Visualization: data/visualization.md
+    - Data Engineering: data/engineering.md
+    - Data Pipelines: data/pipelines.md
+    - Databases & Storage: data/storage.md
+    - Time Series: data/time-series.md
+
+  - MLOps:
+    - mlops/index.md
+    - Cloud Platforms: mlops/cloud.md
+
+  - Security:
+    - security/index.md
+    - AI Security & Red Teaming: security/ai-security.md
+    - AI for Cybersecurity: security/cybersecurity.md
+
+  - Optimization:
+    - optimization/index.md
+    - Gradient Descent: optimization/gradient-descent.md
+    - Genetic Algorithms: optimization/genetic-algorithms.md
+    - Particle Swarm: optimization/particle-swarm.md
+    - Linear Programming: optimization/linear-programming.md
+    - Multi-Objective: optimization/multi-objective.md
+
+  - Specialized:
+    - Reinforcement Learning: specialized/reinforcement-learning.md
+    - Neuronal Analysis: specialized/neuronal-analysis.md
+
+  - Industry & Ethics:
+    - industry/index.md
+    - AI in Finance: industry/finance.md
+    - AI in Healthcare: industry/healthcare.md
+    - AI in Retail: industry/retail.md
+    - Automation & Robotics: industry/robotics.md
+    - Business Intelligence: industry/business-intelligence.md
+    - AI Ethics: industry/ethics.md
+
+  - Research:
+    - research/index.md
+    - Reading Papers: research/reading-papers.md
+    - Journals & Conferences: research/journals-conferences.md
+    - Cutting-Edge Research: research/cutting-edge.md

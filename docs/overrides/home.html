@@ -1,0 +1,113 @@
+{% extends "main.html" %}
+
+{% block tabs %}
+{{ super() }}
+<style>
+  .md-header { position: initial }
+  .md-main__inner { margin: 0 }
+  .md-content { display: none }
+  @media screen and (min-width:60em) {
+    .md-sidebar--secondary { display: none }
+  }
+  @media screen and (min-width:76.25em) {
+    .md-sidebar--primary { display: none }
+  }
+</style>
+
+<section class="ai-hero">
+  <div class="ai-hero__inner md-grid md-typeset">
+    <div class="ai-hero__teaser">
+      <h1>AI Tricks</h1>
+      <p class="ai-hero__subtitle">
+        Your practical handbook for AI, Machine Learning, LLMs, Agents, and everything in between.<br>
+        <strong>Like HackTricks — but for AI.</strong>
+      </p>
+      <div class="ai-hero__cta">
+        <a href="getting-started/" class="md-button md-button--primary">
+          Get Started
+        </a>
+        <a href="llm/" class="md-button">
+          LLMs & Agents
+        </a>
+      </div>
+    </div>
+    <div class="ai-hero__stats">
+      <div class="ai-stat"><span class="ai-stat__number">30+</span><span class="ai-stat__label">Topics</span></div>
+      <div class="ai-stat"><span class="ai-stat__number">200+</span><span class="ai-stat__label">Code Examples</span></div>
+      <div class="ai-stat"><span class="ai-stat__number">10</span><span class="ai-stat__label">New 2025 Topics</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="ai-features md-typeset">
+  <div class="md-grid">
+    <div class="ai-features__grid">
+
+      <a href="foundations/" class="ai-feature-card">
+        <div class="ai-feature-card__icon">📐</div>
+        <h3>Foundations</h3>
+        <p>Math, stats, probability, and programming — the bedrock every AI practitioner needs.</p>
+      </a>
+
+      <a href="machine-learning/" class="ai-feature-card">
+        <div class="ai-feature-card__icon">🤖</div>
+        <h3>Machine Learning</h3>
+        <p>End-to-end ML lifecycle, supervised and unsupervised algorithms with real code.</p>
+      </a>
+
+      <a href="deep-learning/" class="ai-feature-card">
+        <div class="ai-feature-card__icon">🧠</div>
+        <h3>Deep Learning</h3>
+        <p>Neural networks, CNNs, RNNs, Transformers, and training tricks that actually work.</p>
+      </a>
+
+      <a href="llm/" class="ai-feature-card ai-feature-card--highlight">
+        <div class="ai-feature-card__icon">💬</div>
+        <h3>LLMs & Agents</h3>
+        <p>Prompt engineering, RAG, fine-tuning, AI agents with tool use — the modern AI stack.</p>
+      </a>
+
+      <a href="generative-ai/" class="ai-feature-card">
+        <div class="ai-feature-card__icon">🎨</div>
+        <h3>Generative AI</h3>
+        <p>Diffusion models, Stable Diffusion, ControlNet, multimodal models, and GANs.</p>
+      </a>
+
+      <a href="mlops/" class="ai-feature-card">
+        <div class="ai-feature-card__icon">🚀</div>
+        <h3>MLOps</h3>
+        <p>Deploy, monitor, and maintain ML systems in production with CI/CD and drift detection.</p>
+      </a>
+
+      <a href="security/" class="ai-feature-card">
+        <div class="ai-feature-card__icon">🔒</div>
+        <h3>AI Security</h3>
+        <p>Adversarial attacks, red teaming, prompt injection, and securing AI systems.</p>
+      </a>
+
+      <a href="data/" class="ai-feature-card">
+        <div class="ai-feature-card__icon">📊</div>
+        <h3>Data</h3>
+        <p>EDA, feature engineering, pipelines, time series, and visualization at scale.</p>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<section class="ai-askdocs-banner md-typeset">
+  <div class="md-grid">
+    <div class="ai-askdocs-banner__inner">
+      <div class="ai-askdocs-banner__icon">🤖</div>
+      <div>
+        <h3>Ask AI Docs</h3>
+        <p>Every page has an <strong>Ask AI</strong> button — use your Claude API key to ask questions about the current topic in real time.</p>
+      </div>
+      <button class="md-button md-button--primary" onclick="window.askDocs && window.askDocs.open()">Try It Now</button>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block content %}{% endblock %}
+{% block footer %}{{ super() }}{% endblock %}

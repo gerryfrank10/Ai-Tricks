@@ -1,0 +1,425 @@
+/* ============================================================
+   AI Tricks — Custom Styles for MkDocs Material
+   ============================================================ */
+
+/* ---- Hero Section ----------------------------------------- */
+.ai-hero {
+  padding: 4rem 0 3rem;
+  background: linear-gradient(135deg, #1a0533 0%, #0d1b40 50%, #0a2540 100%);
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+.ai-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(103, 58, 183, 0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 188, 212, 0.2) 0%, transparent 50%);
+}
+
+.ai-hero__inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.ai-hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 900;
+  margin: 0 0 0.5rem;
+  background: linear-gradient(135deg, #fff 30%, #80cbc4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.1;
+}
+
+.ai-hero__subtitle {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.85);
+  max-width: 600px;
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.ai-hero__cta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ai-hero__cta .md-button--primary {
+  background: linear-gradient(135deg, #7c4dff, #00bcd4);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.ai-hero__cta .md-button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(124, 77, 255, 0.4);
+}
+
+.ai-hero__cta .md-button:not(.md-button--primary) {
+  border: 2px solid rgba(255,255,255,0.4);
+  color: #fff;
+  background: transparent;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+}
+
+.ai-hero__stats {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.ai-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ai-stat__number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #80cbc4;
+  line-height: 1;
+}
+
+.ai-stat__label {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.25rem;
+}
+
+/* ---- Feature Cards ---------------------------------------- */
+.ai-features {
+  padding: 3rem 0;
+  background: var(--md-default-bg-color);
+}
+
+.ai-features__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.ai-feature-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: var(--md-code-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  text-decoration: none !important;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  color: var(--md-default-fg-color) !important;
+}
+
+.ai-feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+  border-color: var(--md-primary-fg-color);
+}
+
+.ai-feature-card--highlight {
+  border-color: var(--md-primary-fg-color);
+  background: linear-gradient(135deg, rgba(103,58,183,0.08), rgba(0,188,212,0.08));
+}
+
+.ai-feature-card__icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.ai-feature-card h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.ai-feature-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--md-default-fg-color--light);
+  line-height: 1.5;
+}
+
+/* ---- Ask Docs Banner -------------------------------------- */
+.ai-askdocs-banner {
+  padding: 2rem 0;
+  background: var(--md-code-bg-color);
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.ai-askdocs-banner__inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.ai-askdocs-banner__icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+}
+
+.ai-askdocs-banner__inner h3 {
+  margin: 0 0 0.25rem;
+}
+
+.ai-askdocs-banner__inner p {
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+}
+
+/* ---- Ask Docs Widget -------------------------------------- */
+#ask-docs-fab {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7c4dff, #00bcd4);
+  border: none;
+  cursor: pointer;
+  z-index: 10000;
+  box-shadow: 0 4px 16px rgba(124,77,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: #fff;
+}
+
+#ask-docs-fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(124,77,255,0.6);
+}
+
+#ask-docs-panel {
+  position: fixed;
+  bottom: 5rem;
+  right: 1.5rem;
+  width: 380px;
+  max-width: calc(100vw - 2rem);
+  max-height: 560px;
+  border-radius: 16px;
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.25);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(.34,1.56,.64,1), opacity 0.2s;
+}
+
+#ask-docs-panel.hidden {
+  transform: translateY(20px) scale(0.95);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ask-docs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #7c4dff, #00bcd4);
+  color: #fff;
+}
+
+.ask-docs-header h4 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.ask-docs-header span {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.ask-docs-close {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0;
+  opacity: 0.8;
+  transition: opacity 0.15s;
+}
+.ask-docs-close:hover { opacity: 1; }
+
+.ask-docs-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  scroll-behavior: smooth;
+}
+
+.ask-docs-msg {
+  max-width: 90%;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+.ask-docs-msg--user {
+  background: linear-gradient(135deg, #7c4dff, #5c35cc);
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.ask-docs-msg--ai {
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.ask-docs-msg--system {
+  background: rgba(0,188,212,0.1);
+  border: 1px solid rgba(0,188,212,0.3);
+  color: var(--md-default-fg-color--light);
+  align-self: center;
+  font-size: 0.8rem;
+  max-width: 100%;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.ask-docs-msg code {
+  background: rgba(0,0,0,0.15);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+}
+
+.ask-docs-typing {
+  display: flex;
+  gap: 4px;
+  padding: 0.5rem 0.9rem;
+  background: var(--md-code-bg-color);
+  border-radius: 12px;
+  border-bottom-left-radius: 4px;
+  align-self: flex-start;
+}
+
+.ask-docs-typing span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--md-primary-fg-color);
+  animation: typing-bounce 1.2s infinite;
+}
+.ask-docs-typing span:nth-child(2) { animation-delay: 0.2s; }
+.ask-docs-typing span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-6px); opacity: 1; }
+}
+
+.ask-docs-input-area {
+  padding: 0.75rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  display: flex;
+  gap: 0.5rem;
+  background: var(--md-default-bg-color);
+}
+
+.ask-docs-input-area input {
+  flex: 1;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  font-size: 0.875rem;
+  outline: none;
+  font-family: inherit;
+}
+
+.ask-docs-input-area input:focus {
+  border-color: var(--md-primary-fg-color);
+  box-shadow: 0 0 0 2px rgba(124,77,255,0.2);
+}
+
+.ask-docs-input-area button {
+  padding: 0.6rem 1rem;
+  background: linear-gradient(135deg, #7c4dff, #00bcd4);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.ask-docs-input-area button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ask-docs-apikey-notice {
+  padding: 0.6rem 0.9rem;
+  font-size: 0.75rem;
+  color: var(--md-default-fg-color--light);
+  text-align: center;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.ask-docs-apikey-notice a {
+  color: var(--md-primary-fg-color);
+}
+
+/* ---- General Improvements --------------------------------- */
+.md-typeset h1 {
+  font-weight: 800;
+}
+
+.md-typeset table:not([class]) {
+  font-size: 0.85rem;
+}
+
+.md-typeset code {
+  border-radius: 4px;
+}
+
+/* Tip/Note/Warning boxes — more contrast */
+.md-typeset .admonition.tip > .admonition-title {
+  background-color: rgba(0, 200, 83, 0.12);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--md-default-fg-color--lighter); border-radius: 3px; }
