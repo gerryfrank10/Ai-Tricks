@@ -10,10 +10,14 @@ AI is transforming every major industry. This section provides domain-specific g
 |------|----------|-------------------|
 | [Finance](finance.md) | Banking, trading, insurance | Fraud detection, credit scoring, algorithmic trading |
 | [Healthcare](healthcare.md) | Hospitals, pharma, diagnostics | Medical imaging, EHR analysis, drug discovery |
+| [Law Firms](law-firms.md) | Legal services, e-discovery | Contract review, legal research, RAG over case law |
 | [Retail](retail.md) | E-commerce, CPG | Recommendations, demand forecasting, visual search |
 | [Automation & Robotics](robotics.md) | Manufacturing, logistics | Robot learning, LLM task planning, computer vision |
 | [Business Intelligence](business-intelligence.md) | Enterprise analytics | Text2SQL, anomaly detection, automated reporting |
 | [AI Ethics](ethics.md) | All industries | Privacy, fairness, differential privacy, GDPR |
+| [Architecture & Construction](architecture.md) | AEC, real estate | Generative design, BIM+AI, energy optimization, site analysis |
+| [Agriculture](agriculture.md) | Farming, agri-business | Precision farming, crop monitoring, yield prediction, livestock AI |
+| [Manufacturing & Industry 4.0](manufacturing.md) | Factory, industrial, supply chain | Predictive maintenance, visual inspection, digital twins, cobots |
 
 ---
 
@@ -23,7 +27,7 @@ AI is transforming every major industry. This section provides domain-specific g
 High Adoption  ████████████  Finance, Tech, Retail
                ████████░░░░  Healthcare, Manufacturing
 Medium         ██████░░░░░░  Legal, Education, Agriculture
-Low            ████░░░░░░░░  Construction, Government
+Low/Growing    ████░░░░░░░░  Construction/AEC (rapidly evolving), Government
 ```
 
 ---
