@@ -68,6 +68,7 @@ extra_css:
 
 extra_javascript:
   - javascripts/ask-docs.js
+  - https://unpkg.com/mermaid@11/dist/mermaid.min.js
 
 plugins:
   - search:
@@ -209,6 +210,7 @@ nav:
     - AI in Hospitals: industry/hospitals.md
     - AI in Agriculture: industry/agriculture.md
     - AI in Manufacturing: industry/manufacturing.md
+    - AI in Logistics: industry/logistics.md
     - AI Ethics: industry/ethics.md
 
   - Research:

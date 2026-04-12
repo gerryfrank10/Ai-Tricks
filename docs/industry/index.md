@@ -18,6 +18,7 @@ AI is transforming every major industry. This section provides domain-specific g
 | [Architecture & Construction](architecture.md) | AEC, real estate | Generative design, BIM+AI, energy optimization, site analysis |
 | [Agriculture](agriculture.md) | Farming, agri-business | Precision farming, crop monitoring, yield prediction, livestock AI |
 | [Manufacturing & Industry 4.0](manufacturing.md) | Factory, industrial, supply chain | Predictive maintenance, visual inspection, digital twins, cobots |
+| [Logistics & Supply Chain](logistics.md) | 3PL, freight, warehousing, e-commerce | Route optimization, warehouse robotics, demand forecasting, real-time visibility |
 
 ---
 
