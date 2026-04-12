@@ -1,281 +1,477 @@
 # AI in Manufacturing & Industry 4.0
 
-Manufacturing is undergoing its most significant transformation since the assembly line. Artificial intelligence, combined with Industrial IoT (IIoT), edge computing, and robotics, is reshaping how factories design, produce, and maintain physical goods. The global Industry 4.0 market was valued at approximately **$130 billion in 2023** and is projected to exceed **$400 billion by 2030** (MarketsandMarkets, 2023). Manufacturers adopting AI-driven predictive maintenance report **up to 40% reduction in unplanned downtime**, while AI-powered quality inspection systems routinely achieve **defect detection accuracy above 99%**, outperforming manual inspection by a wide margin. Overall Equipment Effectiveness (OEE) improvements of **10–20 percentage points** are commonly reported within 12–18 months of deployment. This page provides a practitioner-focused guide to the tools, platforms, workflows, and standards that matter most for engineers and operations teams entering the AI-driven factory.
+![Factory floor with industrial robots and automated assembly lines](https://images.unsplash.com/photo-1565043666747-69f6646db940?w=1200&q=80&auto=format&fit=crop)
+
+Manufacturing is undergoing its most profound transformation since the introduction of the assembly line. Artificial intelligence — combined with Industrial IoT (IIoT), edge computing, digital twins, and collaborative robotics — is reshaping how factories design, build, and maintain physical goods at every scale. The global **Industry 4.0 market** was valued at approximately **$130 billion in 2023** and is projected to exceed **$377 billion by 2029** (MarketsandMarkets, 2024). Manufacturers that have deployed AI-driven predictive maintenance report **30–50% reductions in unplanned downtime**, while AI-powered visual quality inspection routinely achieves **defect detection accuracy above 99%**, surpassing human inspectors at a fraction of the cost. **Overall Equipment Effectiveness (OEE) improvements of 8–20 percentage points** are documented across McKinsey's global Lighthouse Factory network within 12–18 months of full deployment. AI-optimised energy management delivers **10–20% reductions in consumption** in process industries. This guide provides engineers, operations managers, and digital transformation leaders with a comprehensive, practitioner-focused reference covering tools, workflows, open-source ecosystems, compliance frameworks, and proven ROI metrics.
 
 ---
 
 ## Key AI Use Cases
 
-### Predictive Maintenance
+### 1. Predictive Maintenance (PdM)
 
-Predictive maintenance (PdM) replaces time-based servicing schedules with condition-based interventions triggered by real sensor data. Vibration sensors, acoustic emission transducers, thermal cameras, and oil-condition monitors feed continuous streams into ML models trained to recognise degradation signatures before failure occurs. The result is a dramatic reduction in both emergency downtime and unnecessary preventive replacements.
+Predictive maintenance replaces rigid time-based service schedules with condition-based interventions triggered by real sensor signals. Vibration accelerometers, acoustic emission transducers, thermal imaging cameras, oil-particle monitors, and motor current analysers feed continuous streams into ML models trained to recognise bearing-wear signatures, rotor imbalance, cavitation, and lubrication degradation before catastrophic failure occurs. The result is a dramatic reduction in both emergency downtime and unnecessary preventive part replacements.
 
-**Platforms used:** IBM Maximo Application Suite, Augury, Uptake, GE Vernova (Predix), Rockwell FactoryTalk Analytics, SAP PM (with AI add-ons), Aspentech Mtell.
+**Key platforms:** Augury, Uptake, C3.ai APM, IBM Maximo Application Suite, SKF Enlight Centre, Aspentech Mtell, GE Vernova Predix APM, Rockwell FactoryTalk Analytics.
 
-**Typical sensor inputs:** Vibration (accelerometers), temperature (RTDs/thermocouples), acoustic emission, current/voltage, oil particle counts, pressure.
+```mermaid
+sequenceDiagram
+    participant S as Sensor Array<br/>(Vibration / Temp / Acoustic)
+    participant E as Edge Gateway<br/>(OPC-UA / MQTT)
+    participant F as Feature Extraction<br/>(RMS, FFT, Kurtosis)
+    participant M as ML Model<br/>(LSTM / Isolation Forest / RUL)
+    participant A as Alert Engine
+    participant C as CMMS<br/>(IBM Maximo / SAP PM)
+    participant T as Maintenance Tech
 
-**Alert destinations:** CMMS (Computerised Maintenance Management Systems) such as IBM Maximo, SAP PM, UpKeep, or Fiix.
+    S->>E: Raw telemetry (100–10,000 Hz)
+    E->>F: Windowed sensor burst
+    F->>M: 50–200 engineered features
+    M->>A: Anomaly score / RUL estimate
+    A->>C: Work order auto-created (priority: HIGH)
+    C->>T: Push notification + parts recommendation
+    T->>C: Work completed — feedback label
+    C->>M: Retraining trigger (active learning)
+```
 
----
+**Sensor stack summary:**
 
-### Quality Control & Visual Inspection
-
-AI-powered computer vision systems inspect products at line speed — often hundreds of units per minute — for surface defects, dimensional deviations, colour anomalies, and assembly errors. These systems operate at the edge (on-premises GPU hardware) or in hybrid cloud configurations, integrating directly with MES platforms to quarantine non-conforming parts and trigger corrective actions.
-
-**Platforms used:** Landing AI (LandingLens), Cognex Vision Pro, Keyence AI Vision, Teledyne DALSA, Basler Vision, Omron FH series, Zebra Aurora, MVTec HALCON.
-
-**Common deployment patterns:**
-- Inline inspection: camera mounted directly on the production line
-- Offline sampling: parts diverted to dedicated inspection stations
-- End-of-line: final assembly verification before boxing
-
----
-
-### Digital Twins
-
-A digital twin is a continuously updated virtual replica of a physical asset, process, or entire factory. It ingests live sensor data, operational parameters, and maintenance history to simulate behaviour, test scenarios, and optimise performance without touching the physical system. Manufacturers use digital twins for capacity planning, failure simulation, operator training, and remote monitoring.
-
-**Platforms used:** Siemens Xcelerator / MindSphere, Ansys Twin Builder, PTC ThingWorx + Vuforia, Dassault Systèmes 3DEXPERIENCE, NVIDIA Omniverse for manufacturing, GE Vernova Predix, Bentley iTwin.
-
----
-
-### Supply Chain Optimization
-
-AI algorithms optimise sourcing decisions, inventory levels, logistics routing, and supplier risk assessment. Natural language processing tools extract insights from supplier contracts and news feeds, alerting procurement teams to disruption risks before they materialise.
-
-**Platforms used:** SAP Integrated Business Planning (IBP), Blue Yonder (formerly JDA), Kinaxis RapidResponse, o9 Solutions, Llamasoft (now part of Coupa), Oracle SCM Cloud with AI add-ons.
+| Sensor Type | Signal | Detects | Hardware Examples |
+|---|---|---|---|
+| MEMS Accelerometer | 0.1–20 kHz vibration | Bearing defects, imbalance, looseness | PCB Piezotronics, Brüel & Kjær |
+| Acoustic Emission | 100 kHz–1 MHz ultrasound | Early-stage cracks, lubrication failure | Mistras Group, Physical Acoustics |
+| Thermocouple / RTD | Temperature | Overheating, coolant failure | Omega Engineering |
+| Motor Current Signature | 0–60 Hz current | Rotor bar defects, eccentricity | SKF IMx, Fluke |
+| Oil Particle Counter | Particle count & size | Wear debris, contamination | Parker Kittiwake |
 
 ---
 
-### Generative Design & Product Engineering
+### 2. Visual Quality Inspection
 
-Generative design tools use AI optimisation algorithms (topology optimisation, genetic algorithms, gradient-based methods) to explore vast design spaces and produce lightweight, structurally optimal geometries that humans would never conceive manually. Engineers specify constraints (loads, materials, manufacturing processes, cost targets) and the software generates hundreds of candidates.
+AI-powered computer vision inspects products at line speed — often hundreds to thousands of units per minute — detecting surface defects, dimensional deviations, colour anomalies, contamination, and assembly errors. Systems run at the edge on industrial GPU hardware and integrate with MES platforms to quarantine non-conforming parts, update SPC charts, and auto-generate non-conformance reports (NCRs).
 
-**Platforms used:** Autodesk Fusion (Generative Design workspace), nTopology, Altair Inspire, Siemens NX with Convergent Modelling, PTC Creo Generative Design, ANSYS Discovery.
+**Key platforms:** LandingLens (Landing AI), Cognex VisionPro, Keyence AI Vision, Zebra Aurora Vision Studio, MVTec HALCON, Teledyne DALSA Sherlock, Omron FH Series.
+
+```mermaid
+flowchart TD
+    CAM["📷 Industrial Camera\n(Basler / Allied Vision / Cognex)"] --> BUF["Frame Buffer\n(GPU Memory)"]
+    BUF --> INF["Edge AI Inference Node\nNVIDIA Jetson AGX / IPC\nModel: CNN / ViT / PatchCore\nLatency: <50 ms"]
+    INF --> DEC{Decision Engine}
+    DEC -->|PASS| CONV["✅ Conveyor continues\nResult logged to MES"]
+    DEC -->|FAIL| REJ["❌ Rejection actuator\nDefect image archived"]
+    DEC -->|MARGINAL| HUM["👤 Human review station\nActive learning label"]
+    REJ --> MES["MES / SCADA Integration\n(SAP Digital Mfg / FactoryTalk)\n• Defect log + image evidence\n• SPC chart update\n• NCR auto-creation\n• OPC-UA alert"]
+    HUM --> LOOP["🔄 Model Retraining\n(LandingLens active learning\n/ Azure ML pipeline)"]
+    LOOP --> INF
+```
+
+**Deployment patterns:**
+- **Inline inspection:** Camera mounted on conveyor — zero throughput impact, full 100% inspection
+- **Offline sampling:** Parts diverted to dedicated station — suitable for complex multi-angle inspection
+- **End-of-line:** Final assembly verification before packaging — catches assembly errors
+- **Structured light / 3D:** For dimensional inspection of cast or machined parts (Keyence LJ-X, SICK Ranger3)
 
 ---
 
-### Demand Forecasting & Production Planning
+### 3. Digital Twins
 
-Machine learning models trained on historical sales, seasonality, promotions, macroeconomic signals, and external data sources (weather, social media) produce more accurate demand forecasts than traditional statistical methods. Better forecasts reduce inventory costs, improve service levels, and allow production schedules to be tightened.
+A digital twin is a continuously updated virtual replica of a physical asset, production line, or entire factory. It ingests live sensor data, operational parameters, and maintenance history to simulate behaviour, test operational scenarios, and optimise throughput and energy use without touching the physical system.
 
-**Platforms used:** SAP Integrated Business Planning, Blue Yonder Luminate, Kinaxis RapidResponse, Oracle Demand Management, Infor Nexus, Plex Systems, Prodsmart.
+**Key platforms:** Siemens Xcelerator / Tecnomatix Plant Simulation, Ansys Twin Builder, NVIDIA Omniverse for Manufacturing, PTC ThingWorx + Vuforia, Dassault Systèmes 3DEXPERIENCE, Azure Digital Twins, Bentley iTwin.
+
+```mermaid
+flowchart LR
+    subgraph Physical["🏭 Physical World"]
+        ASSET["Machine / Line / Plant"]
+        SENSOR["Sensors\n(OPC-UA / MQTT / Kafka)"]
+        PLC["PLC / SCADA / DCS"]
+    end
+
+    subgraph Virtual["💻 Virtual World"]
+        MODEL["3D / Physics Model\n(Ansys / 3DEXPERIENCE\n/ NVIDIA Omniverse)"]
+        AI["Analytics & AI\n• What-if scenarios\n• Failure prediction\n• KPI optimisation\n• Energy modelling"]
+        DASH["Operator Dashboard\n(MindSphere / ThingWorx\n/ Azure Digital Twins)"]
+    end
+
+    ASSET --> SENSOR
+    SENSOR -->|"Real-time telemetry"| MODEL
+    MODEL --> AI
+    AI --> DASH
+    DASH -->|"Setpoint recommendations"| PLC
+    PLC --> ASSET
+```
+
+**Digital twin tiers:**
+
+| Tier | Scope | Typical Tool | Latency |
+|------|-------|-------------|---------|
+| Component twin | Single bearing, motor, valve | Ansys Twin Builder | Seconds |
+| Asset twin | CNC machine, compressor, robot | Siemens MindSphere | Sub-minute |
+| Line twin | Full production line | Siemens Tecnomatix | Minutes |
+| Factory twin | Entire plant layout + logistics | NVIDIA Omniverse, Dassault 3DEXPERIENCE | Hours (scenario) |
 
 ---
 
-### Collaborative Robots (Cobots)
+### 4. Generative Design & Product Engineering
 
-Cobots are designed to work alongside human operators without safety cages, using force-torque sensors, computer vision, and AI-based motion planning to adapt to human presence in real time. AI upgrades traditional cobot deployments with natural language programming interfaces, vision-guided pick-and-place, and adaptive assembly sequencing.
+Generative design tools use AI-driven topology optimisation algorithms — gradient-based, genetic, or SIMP (Solid Isotropic Material with Penalisation) — to explore vast design spaces and produce lightweight, structurally optimal geometries. Engineers specify constraints (load cases, materials, manufacturing methods, cost targets) and the software generates hundreds of candidates, often discovering organic lattice or bone-like structures that reduce part mass by 30–70% while meeting all structural requirements.
 
-**Platforms used:** Universal Robots (UR+, Polyscope), FANUC CR series, ABB GoFa/SWIFTI, KUKA LBR iisy, Techman Robot (with built-in vision), Doosan Robotics. Programming environments: URSim, RoboDK, Roboflow (for vision datasets).
+**Key platforms:** Autodesk Fusion Generative Design, nTopology, Dassault Systèmes 3DEXPERIENCE (SIMULIA), Altair Inspire, Siemens NX with Convergent Modelling, PTC Creo Generative Design Extension.
+
+```mermaid
+flowchart TD
+    A["1. Define Design Space\nBoundary geometry, preserve zones\nload cases, material library"] --> B["2. Specify Constraints\nSafety factor, mass target,\nmanufacturing method, cost limit"]
+    B --> C["3. Run Generative Study\nTopology optimisation on cloud HPC\nAutodesk / nTopology Engine\n(hours → 100s of candidates)"]
+    C --> D["4. Review Candidates\nRank by mass / stiffness /\nmanufacturability score"]
+    D --> E["5. Select & Refine\nAdd fastener holes, surface finish\nManual CAD clean-up"]
+    E --> F["6. Validate\nFEA stress + thermal analysis\n(ANSYS, Abaqus, Fusion Sim)"]
+    F -->|Pass| G["7. Export for Production\nSTL → Additive Mfg (DMLS, SLA)\nSTEP → CNC, Casting"]
+    F -->|Fail| E
+```
 
 ---
 
-### Energy Consumption Optimization
+### 5. Supply Chain & Demand Forecasting
 
-AI-driven energy management systems analyse consumption patterns across HVAC, compressed air, lighting, motors, and process equipment to identify waste, shift loads to off-peak tariff windows, and predict energy costs. In energy-intensive industries (steel, cement, chemicals), this can represent millions of dollars per year.
+ML models trained on historical orders, seasonal patterns, promotions, macroeconomic signals, supplier lead times, and external data (weather, port congestion, geopolitical risk feeds) produce demand forecasts that reduce forecast error (MAPE) by 20–40% compared to classical statistical methods (ARIMA, Holt-Winters). Better forecasts reduce safety stock, improve service levels, and allow tighter production scheduling.
 
-**Platforms used:** Siemens SIMATIC Energy Manager, Schneider Electric EcoStruxure Energy, Honeywell Forge Energy Optimisation, IBM Environmental Intelligence Suite, Wattsense, C3.ai Energy Management.
+**Key platforms:** Blue Yonder Luminate Planning, o9 Solutions, Kinaxis RapidResponse, SAP Integrated Business Planning (IBP), Oracle Demand Management Cloud, Infor Nexus.
+
+```mermaid
+flowchart LR
+    D1["Historical Sales\n& Orders"] --> ENS
+    D2["Seasonal / Calendar\nEvents"] --> ENS
+    D3["Macroeconomic\nSignals"] --> ENS
+    D4["Supplier Risk\nFeeds (NLP)"] --> ENS
+    ENS["Ensemble Forecast Model\n(XGBoost + LSTM + Prophet)\nBlue Yonder / Kinaxis"] --> OUT["Demand Signal"]
+    OUT --> SCH["Production\nScheduling"]
+    OUT --> INV["Inventory\nOptimisation"]
+    OUT --> PRO["Procurement\nAutomation\n(SAP Ariba / Coupa)"]
+```
+
+---
+
+### 6. Collaborative Robots (Cobots)
+
+AI-enhanced cobots work alongside humans without safety cages, using force-torque sensors, depth cameras, and AI-based motion planning to adapt to human presence in real time. The latest generation integrates natural language programming interfaces, vision-guided pick-and-place with 3D point clouds, and adaptive assembly sequencing that adjusts to part variation.
+
+**Key platforms:** Universal Robots UR Series (UR+ ecosystem), ABB GoFa / SWIFTI, FANUC CRX, Techman Robot (built-in vision), Doosan Robotics, KUKA LBR iisy. Programming: RoboDK, Roboflow (vision datasets), Polyscope X.
+
+```mermaid
+flowchart TD
+    CAP["Depth Camera\n(Intel RealSense / ZED2)"] --> VIS["Vision AI\n3D Pose Estimation\nObject Detection\n(YOLO / ViT)"]
+    FT["Force-Torque Sensor\n(ATI / OnRobot)"] --> CTRL
+    VIS --> CTRL["Cobot Controller\n(UR Polyscope X / FANUC R-30+iB)\nAI Motion Planner"]
+    NL["Natural Language\nProgramming Interface\n(Siemens Copilot / UR AI)"] --> CTRL
+    CTRL --> ARM["Cobot Arm\n(6-DOF)"]
+    ARM -->|"Force limit breach"| STOP["Safe Stop\n(ISO/TS 15066 compliant)"]
+    ARM --> TASK["Assembly / Pick-Place\n/ Inspection / Welding"]
+```
+
+---
+
+### 7. Energy Optimisation
+
+AI energy management systems analyse consumption patterns across HVAC, compressed air networks, lighting, drives, and process equipment to identify waste, shift flexible loads to off-peak tariff windows, and predict energy cost trajectories. In energy-intensive industries — steel, cement, chemicals, aluminium smelting — this represents millions of dollars per year in savings.
+
+**Key platforms:** Siemens SIMATIC Energy Manager, Schneider Electric EcoStruxure Energy Expert, IBM Envizi (ESG & Energy), C3.ai Energy Management, GridPoint, Honeywell Forge Energy Optimisation.
+
+---
+
+### 8. LLM Copilots in Manufacturing
+
+Generative AI assistants embedded in industrial platforms are reducing the cognitive burden on engineers and operators. They generate PLC code, answer maintenance queries in natural language, retrieve relevant documentation from millions of pages in milliseconds, and translate operator observations into structured work orders.
+
+| Product | Provider | Integration | Key Capabilities |
+|---------|----------|-------------|-----------------|
+| **Siemens Industrial Copilot** | Siemens + Microsoft | TIA Portal, SINUMERIK, SIMATIC | PLC code generation, fault diagnosis, multi-language operator support |
+| **PTC Copilot** | PTC | ThingWorx, ServiceMax, Creo | Asset health Q&A, service procedure lookup, CAD design suggestions |
+| **Rockwell FactoryTalk AI** | Rockwell Automation | FactoryTalk Historian / View | NL queries over historian, anomaly explanation, OEE root-cause |
+| **IBM Maximo Copilot** | IBM | Maximo Application Suite | Work order creation by voice, maintenance history summarisation |
+| **SAP Joule for Manufacturing** | SAP | Digital Manufacturing, IBP | Production planning Q&A, supply disruption alerts |
+| **Tulip AI Assist** | Tulip Interfaces | Tulip platform | Operator step guidance, defect triage, SOP retrieval |
 
 ---
 
 ## Top AI Tools & Platforms
 
-| Tool / Platform | Provider | Category | Key Feature | Industry Focus | Website |
+| Tool / Platform | Provider | Category | Key Feature | Open Source? | Website |
 |---|---|---|---|---|---|
-| Siemens Industrial Copilot | Siemens | LLM Copilot / MES | Natural language interaction with SIMATIC systems; automated code generation for PLCs | Discrete & process manufacturing | siemens.com/industrial-copilot |
-| Siemens MindSphere | Siemens | IIoT Platform | Open IoT OS; device connectivity, analytics apps, digital twin integration | Cross-industry manufacturing | siemens.com/mindsphere |
-| PTC ThingWorx | PTC | IIoT / AR Platform | Rapid IIoT app development, Vuforia AR integration, edge analytics | Industrial equipment, aerospace, auto | ptc.com/thingworx |
-| GE Vernova (Predix) | GE Vernova | Industrial AI Platform | Asset performance management, anomaly detection at scale | Power generation, oil & gas, aviation | gevernova.com |
-| IBM Maximo Application Suite | IBM | Asset & Maintenance Mgmt | AI-powered predictive maintenance, visual inspection, EAM | Utilities, heavy industry, facilities | ibm.com/maximo |
-| SAP Digital Manufacturing | SAP | MES / ERP Integration | Production execution, OEE tracking, AI-driven scheduling | Discrete & batch manufacturing | sap.com/digital-manufacturing |
-| Rockwell FactoryTalk | Rockwell Automation | SCADA / MES / Analytics | Unified production intelligence, AI-powered OEE, historian | Automotive, CPG, life sciences | rockwellautomation.com/factorytalk |
-| Sight Machine | Sight Machine | Manufacturing Analytics | Real-time shop floor analytics, machine performance, yield | Automotive, electronics, CPG | sightmachine.com |
-| Landing AI (LandingLens) | Landing AI | Computer Vision QC | No-code visual inspection platform, edge deployment, active learning | Electronics, pharma, food & bev | landing.ai |
-| Cognex Vision Pro | Cognex | Machine Vision | High-speed barcode reading, defect detection, robot guidance | Automotive, pharma, logistics | cognex.com |
-| Hexagon Manufacturing Intelligence | Hexagon | Metrology / QC | Smart manufacturing solutions, CMM, AI-assisted inspection | Aerospace, automotive, medical devices | hexagon.com/manufacturing |
-| Ansys Twin Builder | Ansys | Digital Twin / Simulation | Physics-based + data-driven hybrid twin, reduced-order models | Aerospace, automotive, energy | ansys.com/twin-builder |
-| Dassault 3DEXPERIENCE | Dassault Systèmes | PLM / Digital Twin | Unified platform: design, simulation, manufacturing, supply chain | Aerospace, automotive, CPG | 3ds.com |
-| NVIDIA Omniverse | NVIDIA | Digital Twin / Simulation | Real-time physically accurate factory simulation, robot training | Warehousing, automotive, electronics | developer.nvidia.com/omniverse |
-| C3.ai | C3.ai | Enterprise AI Platform | Pre-built AI apps for PdM, energy, supply chain, quality | Oil & gas, utilities, manufacturing | c3.ai |
-| Augury | Augury | Predictive Maintenance | Machine health monitoring via vibration/ultrasound, MaaS model | CPG, food & bev, pharma, industrials | augury.com |
-| Uptake | Uptake | Predictive Analytics | Asset intelligence for heavy equipment, fleet, and industrial assets | Mining, energy, rail, construction | uptake.com |
-| Tulip | Tulip Interfaces | No-Code Factory Apps | Frontline operations platform, operator guidance, IoT integration | Electronics, medical devices, auto | tulip.co |
-| Plex Systems | Rockwell Automation | Cloud MES / ERP | Real-time production tracking, quality management, traceability | Automotive, food & bev, aerospace | plex.com |
-| Prodsmart | Autodesk | Shop Floor MES | Mobile-first production tracking, OEE, scheduling for SMEs | SME manufacturers, job shops | autodesk.com/prodsmart |
+| Siemens Industrial Copilot | Siemens | LLM / MES Copilot | NL PLC code generation, fault diagnosis in TIA Portal | No | siemens.com/industrial-copilot |
+| Siemens MindSphere | Siemens | IIoT Platform | Open IoT OS; digital twin integration, analytics apps | No | siemens.com/mindsphere |
+| PTC ThingWorx | PTC | IIoT / AR Platform | 150+ industrial protocol connectors, Vuforia AR, low-code | No | ptc.com/thingworx |
+| GE Vernova Predix | GE Vernova | Industrial AI | Asset performance management, anomaly detection at scale | No | gevernova.com |
+| IBM Maximo Application Suite | IBM | EAM / PdM | AI-powered predictive maintenance, visual inspection | No | ibm.com/maximo |
+| SAP Digital Manufacturing | SAP | MES / ERP | Production execution, OEE, AI-driven scheduling | No | sap.com/digital-manufacturing |
+| Rockwell FactoryTalk | Rockwell Automation | SCADA / MES / Analytics | Unified production intelligence, AI OEE, historian | No | rockwellautomation.com/factorytalk |
+| LandingLens | Landing AI | Computer Vision QC | No-code visual inspection, active learning, edge deploy | No | landing.ai |
+| Cognex VisionPro | Cognex | Machine Vision | PatMax geometry, deep learning defect detection | No | cognex.com |
+| Hexagon Manufacturing Intelligence | Hexagon | Metrology / QC | CMM, smart manufacturing, AI-assisted inspection | No | hexagon.com |
+| Ansys Twin Builder | Ansys | Digital Twin | Physics-based + data-driven hybrid twin, ROMs | No | ansys.com/twin-builder |
+| Dassault 3DEXPERIENCE | Dassault Systèmes | PLM / Digital Twin | Unified design-simulation-manufacturing-supply chain | No | 3ds.com |
+| NVIDIA Omniverse | NVIDIA | Digital Twin / Sim | Real-time physically accurate factory simulation, robot training | Partially (USD) | developer.nvidia.com/omniverse |
+| C3.ai | C3.ai | Enterprise AI | Pre-built AI apps for PdM, energy, supply chain, quality | No | c3.ai |
+| Augury | Augury | Predictive Maintenance | Machine health via vibration/ultrasound, MaaS model | No | augury.com |
+| Uptake | Uptake | Predictive Analytics | Asset intelligence for heavy equipment, rail, mining | No | uptake.com |
+| Tulip Interfaces | Tulip | No-Code Factory Apps | Frontline ops platform, operator guidance, IoT integration | No | tulip.co |
+| Plex Systems | Rockwell Automation | Cloud MES / ERP | Real-time production tracking, quality, traceability | No | plex.com |
+| Prodsmart | Autodesk | Shop Floor MES | Mobile-first OEE, scheduling for SMEs | No | autodesk.com/prodsmart |
+| Sight Machine | Sight Machine | Manufacturing Analytics | Real-time shop floor analytics, machine performance | No | sightmachine.com |
+| Dataiku for Manufacturing | Dataiku | MLOps / Data Science | End-to-end ML pipeline for industrial data scientists | No | dataiku.com |
+| Blue Yonder | Blue Yonder (Panasonic) | Supply Chain AI | Demand forecasting, replenishment, logistics optimisation | No | blueyonder.com |
+| o9 Solutions | o9 Solutions | Supply Chain AI | Integrated business planning, real-time scenario modelling | No | o9solutions.com |
+| Kinaxis RapidResponse | Kinaxis | S&OP / SCM | Concurrent planning, end-to-end supply chain visibility | No | kinaxis.com |
 
 ---
 
-## Technology Behind the Tools
+## Open-Source & Research Ecosystem
 
-### Computer Vision Quality Inspection Pipeline
+### GitHub Repositories
 
+| Repository | Maintainer | Stars (2025) | Use Case |
+|---|---|---|---|
+| [anomalib](https://github.com/openvinotoolkit/anomalib) | Intel / OpenVINO | ~4,200 | Unsupervised anomaly detection for manufacturing visual inspection; benchmarks 30+ algorithms (PatchCore, PaDiM, FastFlow, STFPM) on MVTec AD dataset |
+| [pyod](https://github.com/yzhao062/pyod) | Yue Zhao (CMU) | ~8,700 | Comprehensive Python outlier/anomaly detection library; 45+ algorithms including Isolation Forest, COPOD, LOF, SUOD |
+| [tsai](https://github.com/timeseriesAI/tsai) | timeseriesAI | ~4,900 | State-of-the-art time-series classification, regression, and forecasting with PyTorch; ideal for sensor data / PdM |
+| [detectron2](https://github.com/facebookresearch/detectron2) | Meta AI Research | ~30,000 | Object detection and segmentation platform; used for industrial defect localisation at scale |
+| [OpenPCDet](https://github.com/open-mmlab/OpenPCDet) | OpenMMLab | ~4,200 | 3D point cloud detection; used in automated guided vehicles (AGVs) and cobot spatial awareness |
+| [PyTorch-Forecasting](https://github.com/jdb78/pytorch-forecasting) | Jan Beitner | ~3,900 | Time-series forecasting with Temporal Fusion Transformers; demand forecasting in production |
+| [MNAD](https://github.com/cvlab-yonsei/MNAD) | Yonsei CV Lab | ~500 | Memory-augmented normalising flow for video anomaly detection on factory floor cameras |
+| [sktime](https://github.com/sktime/sktime) | sktime community | ~7,700 | Unified time-series ML framework; classification, regression, clustering of sensor streams |
+
+### HuggingFace Models Relevant to Manufacturing
+
+| Model / Collection | Type | Relevance |
+|---|---|---|
+| `openvinotoolkit/padim` | Anomaly detection | PaDiM-WideResNet50 for unsupervised surface defect detection, MVTec AD benchmark |
+| `google/vit-base-patch16-224` | Vision Transformer | Fine-tuned for defect classification on casting/PCB datasets |
+| `microsoft/swin-transformer` | Vision Transformer | High-accuracy hierarchical ViT; used for semiconductor wafer map classification |
+| `huggingface/time-series-transformer` | Time-Series | Encoder-decoder for multivariate sensor forecasting (RUL prediction) |
+| `Salesforce/moirai-1.0-R-large` | Time-Series Foundation | Universal time-series foundation model; zero-shot forecasting on industrial sensor streams |
+| `google/t5-base` + LoRA fine-tuned | NLP | Maintenance document QA, failure mode summarisation |
+| Various anomalib model cards | Anomaly Detection | Community fine-tunes of PatchCore, FastFlow on DAGM, BTAD, KolektorSDD datasets |
+
+### Kaggle Datasets
+
+| Dataset | Competition / Source | Size | Task |
+|---|---|---|---|
+| [SECOM Semiconductor](https://www.kaggle.com/datasets/paresh2047/uci-semcom) | UCI ML Repository | 1,567 samples, 591 features | Yield prediction — highly imbalanced binary classification |
+| [Steel Surface Defect Detection](https://www.kaggle.com/datasets/fantacher/neu-metal-surface-defects-data) | Northeastern Univ. (NEU-DET) | 1,800 images, 6 defect classes | Computer vision defect classification and detection |
+| [Casting Product Quality](https://www.kaggle.com/datasets/ravirajsinh45/real-life-industrial-dataset-of-casting-product) | Kaggle | 7,348 images | Binary defect/no-defect classification for pump impeller castings |
+| [NASA Bearing Dataset](https://www.kaggle.com/datasets/vinayak123tyagi/bearing-dataset) | NASA PCOE | 4 bearings × 984 files | Remaining useful life (RUL) prediction from vibration time-series |
+| [AI4I 2020 Predictive Maintenance](https://www.kaggle.com/datasets/stephanmatzka/predictive-maintenance-dataset-ai4i-2020) | UCI / Kaggle | 10,000 records | Multi-class failure mode prediction (tool wear, heat dissipation, power, overstrain) |
+| [DAGM 2007 Defect Detection](https://www.kaggle.com/datasets/mhskjelvareid/dagm-2007-competition-dataset-optical-inspection) | DAGM | 15,000 images, 10 classes | Weakly supervised surface defect detection on textured backgrounds |
+| [KolektorSDD2](https://www.kaggle.com/datasets/nxthings/kolektor-surface-defect-dataset-2) | Kolektor Group | 3,335 images | Surface defect segmentation on electrical commutators |
+
+### Code Example: Anomalib for Unsupervised Defect Detection
+
+Intel's **anomalib** library provides a unified API to train, benchmark, and deploy unsupervised anomaly detection models on product images — no defect labels required during training.
+
+```python
+# pip install anomalib>=1.0
+
+from anomalib.data import MVTec
+from anomalib.models import Patchcore
+from anomalib.engine import Engine
+from anomalib.deploy import ExportType
+from pathlib import Path
+import torch
+
+# ── 1. Load dataset (MVTec AD or your own folder of "good" images) ──────────
+datamodule = MVTec(
+    root="./datasets/casting_product",
+    category="impeller",           # subfolder with train/good/ and test/
+    image_size=(256, 256),
+    train_batch_size=32,
+    eval_batch_size=32,
+    num_workers=8,
+    task="segmentation",           # or "classification"
+)
+
+# ── 2. Initialise PatchCore model (best MVTec benchmark performance) ─────────
+model = Patchcore(
+    backbone="wide_resnet50_2",    # ImageNet-pretrained CNN backbone
+    layers=["layer2", "layer3"],   # Feature extraction levels
+    coreset_sampling_ratio=0.1,    # Memory bank sub-sampling for inference speed
+    num_neighbors=9,
+)
+
+# ── 3. Train (no defect labels needed — learns normal distribution only) ─────
+engine = Engine(
+    max_epochs=1,                  # PatchCore is non-iterative: 1 epoch
+    accelerator="gpu" if torch.cuda.is_available() else "cpu",
+    devices=1,
+    logger=False,
+)
+engine.fit(model=model, datamodule=datamodule)
+
+# ── 4. Evaluate on test images (defective + good) ────────────────────────────
+test_results = engine.test(model=model, datamodule=datamodule)
+print(f"AUROC: {test_results[0]['test_image_AUROC']:.4f}")
+# Typical: 0.98+ on casting defects
+
+# ── 5. Export to ONNX for edge deployment (NVIDIA Jetson / Intel OpenVINO) ───
+engine.export(
+    model=model,
+    export_type=ExportType.ONNX,
+    export_root=Path("./exports/casting_patchcore"),
+)
+print("Model exported to ./exports/casting_patchcore/model.onnx")
+
+# ── 6. Run inference on a new production image ────────────────────────────────
+from anomalib.deploy import OpenVINOInferencer
+import cv2
+
+inferencer = OpenVINOInferencer(
+    path="./exports/casting_patchcore/openvino/model.xml",
+    metadata="./exports/casting_patchcore/openvino/metadata.json",
+)
+image = cv2.imread("new_part_image.jpg")
+predictions = inferencer.predict(image=image)
+print(f"Anomaly score: {predictions.pred_score:.4f}")  # > 0.5 = defective
+# predictions.anomaly_map: heatmap showing defect location
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│              COMPUTER VISION INSPECTION PIPELINE                    │
-│                                                                     │
-│  Physical Line                                                      │
-│  ┌──────────┐    ┌──────────────┐    ┌──────────────────────────┐  │
-│  │ Camera   │───▶│ Frame Buffer │───▶│  Edge AI Inference Node  │  │
-│  │ (GigE /  │    │ (GPU memory) │    │  (NVIDIA Jetson / IPC)   │  │
-│  │  USB3)   │    └──────────────┘    │  Model: CNN / ViT        │  │
-│  └──────────┘                        │  Latency: <50 ms         │  │
-│                                      └────────────┬─────────────┘  │
-│                                                   │                 │
-│                               ┌───────────────────▼───────────┐    │
-│                               │  Decision Engine               │    │
-│                               │  PASS  → conveyor continues    │    │
-│                               │  FAIL  → rejection actuator    │    │
-│                               │  ALERT → MES / SCADA via OPC  │    │
-│                               └───────────────────┬───────────┘    │
-│                                                   │                 │
-│  ┌────────────────────────────────────────────────▼─────────────┐  │
-│  │  MES Integration (SAP Digital Mfg / Rockwell FactoryTalk)    │  │
-│  │  • Defect log with image evidence                             │  │
-│  │  • SPC chart update                                          │  │
-│  │  • NCR (Non-Conformance Report) auto-creation                │  │
-│  └─────────────────────────────────────────────────────────────-┘  │
-└─────────────────────────────────────────────────────────────────────┘
+
+**Additional code example: PdM with scikit-learn and sensor features**
+
+```python
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import IsolationForest
+from sklearn.preprocessing import StandardScaler
+
+# ── Simulate a bearing sensor feature dataset ─────────────────────────────────
+# In production: replace with OPC-UA historian query (Kepware / AVEVA PI)
+np.random.seed(42)
+n_normal = 5000
+n_fault = 200
+
+normal_data = pd.DataFrame({
+    "rms_vibration":    np.random.normal(0.5, 0.05, n_normal),
+    "kurtosis":         np.random.normal(3.0, 0.3, n_normal),
+    "peak_frequency_hz":np.random.normal(120, 5, n_normal),
+    "temperature_c":    np.random.normal(65, 3, n_normal),
+    "label": 0  # normal
+})
+fault_data = pd.DataFrame({
+    "rms_vibration":    np.random.normal(1.8, 0.4, n_fault),
+    "kurtosis":         np.random.normal(8.5, 1.2, n_fault),
+    "peak_frequency_hz":np.random.normal(180, 20, n_fault),
+    "temperature_c":    np.random.normal(78, 5, n_fault),
+    "label": 1  # fault
+})
+df = pd.concat([normal_data, fault_data]).sample(frac=1).reset_index(drop=True)
+features = ["rms_vibration", "kurtosis", "peak_frequency_hz", "temperature_c"]
+
+# ── Train Isolation Forest (unsupervised — no fault labels at training time) ──
+scaler = StandardScaler()
+X_train = scaler.fit_transform(df[features])
+
+iso_forest = IsolationForest(
+    n_estimators=200,
+    contamination=0.04,    # Expected 4% anomaly rate
+    random_state=42,
+    n_jobs=-1
+)
+iso_forest.fit(X_train)
+
+# ── Score new sensor readings ─────────────────────────────────────────────────
+new_readings = pd.DataFrame({
+    "rms_vibration": [0.52, 1.95],
+    "kurtosis": [3.1, 9.2],
+    "peak_frequency_hz": [121, 195],
+    "temperature_c": [65.5, 82.1]
+})
+scores = iso_forest.decision_function(scaler.transform(new_readings))
+predictions = iso_forest.predict(scaler.transform(new_readings))
+for i, (score, pred) in enumerate(zip(scores, predictions)):
+    status = "NORMAL" if pred == 1 else "ANOMALY — ALERT MAINTENANCE"
+    print(f"Reading {i+1}: score={score:.3f}  → {status}")
+# Reading 1: score=0.142  → NORMAL
+# Reading 2: score=-0.287 → ANOMALY — ALERT MAINTENANCE
 ```
-
-**Key interfaces:** OPC-UA (sensor → SCADA), REST/MQTT (edge → cloud MES), SFTP/S3 (image archive).
-
-**Toolchain example:** Basler camera → NVIDIA Jetson AGX → LandingLens model → OPC-UA to Rockwell FactoryTalk → SAP Digital Manufacturing.
 
 ---
 
-### Predictive Maintenance Sensor Stack
+## Best Smart Factory Workflow
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│            PREDICTIVE MAINTENANCE SENSOR STACK                   │
-│                                                                  │
-│  Physical Asset (Motor / Pump / Gearbox / Spindle)               │
-│                                                                  │
-│  Sensors:                                                        │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
-│  │ Vibration   │  │ Temperature │  │ Acoustic Emission /     │  │
-│  │ (MEMS accel)│  │ (Thermocouple│  │ Ultrasound              │  │
-│  └──────┬──────┘  └──────┬──────┘  └───────────┬─────────────┘  │
-│         │                │                      │                │
-│         └────────────────┴──────────────────────┘                │
-│                          │                                       │
-│                 ┌─────────▼──────────┐                           │
-│                 │  Edge Gateway      │                           │
-│                 │  (OPC-UA / MQTT)   │                           │
-│                 │  Feature extraction│                           │
-│                 │  (RMS, FFT, kurtosis)                          │
-│                 └─────────┬──────────┘                           │
-│                           │                                      │
-│                 ┌─────────▼──────────────────┐                   │
-│                 │  ML Model (Cloud / Edge)    │                   │
-│                 │  • Isolation Forest         │                   │
-│                 │  • LSTM / Autoencoder       │                   │
-│                 │  • Remaining Useful Life    │                   │
-│                 │    (RUL) regression         │                   │
-│                 └─────────┬──────────────────┘                   │
-│                           │                                      │
-│          ┌────────────────▼──────────────────────────┐           │
-│          │  CMMS Alert (IBM Maximo / SAP PM / UpKeep) │           │
-│          │  • Work order auto-creation                │           │
-│          │  • Severity: Low / Medium / High / Critical│           │
-│          │  • Parts recommendation from inventory     │           │
-│          └───────────────────────────────────────────┘           │
-└──────────────────────────────────────────────────────────────────┘
-```
+```mermaid
+flowchart TD
+    subgraph DESIGN["🎨 Design & Engineering"]
+        D1["Autodesk Fusion /\nSiemens NX\nGenerative Design"]
+        D2["ANSYS / Abaqus\nFEA Simulation"]
+        D3["Dassault 3DEXPERIENCE\nPLM / Change Mgmt"]
+    end
 
----
+    subgraph PROCURE["📦 Procurement & Planning"]
+        P1["SAP IBP\nDemand Forecasting"]
+        P2["Blue Yonder /\nKinaxis\nSupply Planning"]
+        P3["SAP Ariba / Coupa\nSupplier Risk AI\n(NLP monitoring)"]
+    end
 
-### Digital Twin Architecture
+    subgraph MES["🏗️ Production Planning & MES"]
+        M1["SAP Digital Manufacturing\nor Rockwell Plex\nProduction Scheduling"]
+        M2["Tulip Interfaces\nOperator Work Instructions\n+ IoT Integration"]
+        M3["Prodsmart\nSME Shop Floor Tracking"]
+    end
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                  DIGITAL TWIN ARCHITECTURE                       │
-│                                                                  │
-│  Physical World              │  Virtual World                   │
-│  ─────────────               │  ─────────────                   │
-│  ┌─────────────────┐         │         ┌──────────────────────┐ │
-│  │  Physical Asset  │  Data  │  Model  │  3D / Physics Model  │ │
-│  │  (machine/line) │────────►│────────►│  (Ansys / 3DEXP /   │ │
-│  │                 │         │         │   NVIDIA Omniverse)  │ │
-│  └────────┬────────┘         │         └──────────┬───────────┘ │
-│           │                  │                    │             │
-│  Real-time sensor data        │         ┌──────────▼───────────┐ │
-│  (OPC-UA / MQTT / Kafka)      │         │  Analytics & AI      │ │
-│           │                  │         │  • What-if scenarios  │ │
-│           │                  │         │  • Failure prediction │ │
-│           │                  │         │  • KPI optimisation  │ │
-│           │                  │         └──────────┬───────────┘ │
-│           │                  │                    │             │
-│           │                  │    Actuation /     │             │
-│           │                  │    Recommendations │             │
-│  ┌────────▼────────┐         │         ┌──────────▼───────────┐ │
-│  │  Control System │◄────────┤◄────────│  Operator Dashboard  │ │
-│  │  (PLC / SCADA)  │ Commands│         │  (MindSphere / PTC)  │ │
-│  └─────────────────┘         │         └──────────────────────┘ │
-└──────────────────────────────────────────────────────────────────┘
-```
+    subgraph MFG["⚙️ Manufacturing Execution"]
+        MF1["Siemens MindSphere\nReal-Time Asset Monitoring\n+ OPC-UA Data Collection"]
+        MF2["UR / ABB GoFa / FANUC CRX\nAI-Guided Cobots\n(Vision + Force Control)"]
+        MF3["Schneider EcoStruxure\nEnergy Optimisation\n(Compressed Air / HVAC)"]
+    end
 
----
+    subgraph QC["🔍 Quality Control"]
+        Q1["LandingLens / Cognex\nVisual AI Inspection\n(Edge GPU, <50ms)"]
+        Q2["Hexagon CMM /\nKeyence 3D\nDimensional Metrology"]
+        Q3["SAP QM / Rockwell\nSPC + NCR Workflow\nAuto-Quarantine"]
+    end
 
-### Generative Design Workflow in CAD Tools
+    subgraph SHIP["🚚 Logistics & Shipping"]
+        S1["Blue Yonder WMS\nAI Slotting &\nWave Planning"]
+        S2["NVIDIA Omniverse\nWarehouse Robot\nSimulation"]
+        S3["Oracle TMS\nRoute Optimisation\nCO₂ Tracking"]
+    end
 
-| Step | Action | Tool |
-|------|--------|------|
-| 1. Define design space | Set boundary geometry, preserve zones, load cases | Autodesk Fusion, Siemens NX, PTC Creo |
-| 2. Specify constraints | Material library, manufacturing method, safety factor, mass target | Same CAD platform |
-| 3. Run generative study | Algorithm explores topology space (may take hours on cloud HPC) | Autodesk Fusion cloud solve, nTopology Engine, Altair Inspire |
-| 4. Review candidates | Rank by mass, stiffness, manufacturability score | In-platform result explorer |
-| 5. Select & refine | Pick best geometry, apply manufacturing clean-up, add fastener holes | CAD platform + manual edit |
-| 6. Validate | FEA stress/thermal analysis | ANSYS, Abaqus, Fusion Simulation |
-| 7. Export for production | STL/STEP for AM, DXF for CNC, or native format | CAM software (Fusion, Mastercam, Hypermill) |
+    subgraph PdM["🔧 Predictive Maintenance Loop"]
+        PM1["Augury / SKF Enlight\nContinuous Vibration\n& Acoustic Monitoring"]
+        PM2["IBM Maximo / SAP PM\nCMMS Auto Work Orders\nParts Recommendation"]
+        PM3["C3.ai APM\nRUL Prediction\n+ Digital Twin Sync"]
+    end
 
-**Supported manufacturing methods in generative tools:** Additive (FDM, SLA, DMLS), CNC milling (2/3/5-axis), casting, sheet metal, injection moulding.
+    DESIGN --> PROCURE
+    PROCURE --> MES
+    MES --> MFG
+    MFG --> QC
+    QC --> SHIP
+    MFG -.->|"Sensor telemetry\n(OPC-UA / MQTT)"| PdM
+    PdM -.->|"Maintenance actions\n& model retraining"| MFG
 
----
+    classDef design fill:#dbeafe,stroke:#3b82f6
+    classDef procure fill:#fef3c7,stroke:#f59e0b
+    classDef mes fill:#dcfce7,stroke:#22c55e
+    classDef mfg fill:#f3e8ff,stroke:#a855f7
+    classDef qc fill:#fee2e2,stroke:#ef4444
+    classDef ship fill:#ffedd5,stroke:#f97316
+    classDef pdm fill:#e0f2fe,stroke:#0284c7
 
-### LLM Copilots in Industrial Settings
-
-| Product | Provider | Integration Point | Capabilities |
-|---------|----------|-------------------|--------------|
-| Siemens Industrial Copilot | Siemens + Microsoft | SIMATIC, TIA Portal, Xcelerator | PLC code generation, fault diagnosis, maintenance Q&A, operator guidance via natural language |
-| PTC Copilot | PTC | ThingWorx, ServiceMax, Creo | Asset health Q&A, service procedure lookup, CAD design suggestions |
-| Rockwell FactoryTalk Analytics with AI | Rockwell Automation | FactoryTalk View, Historian | Natural language queries over production historian, anomaly explanation |
-| IBM Maximo Copilot | IBM | Maximo Application Suite | Work order creation via voice, maintenance history summarisation, parts lookup |
-| SAP Joule for Manufacturing | SAP | SAP Digital Manufacturing, IBP | Production planning Q&A, supply disruption alerts, schedule adjustments |
-| Tulip AI Assist | Tulip | Tulip platform | Operator step guidance, defect triage, SOP retrieval |
-
----
-
-## Best Workflow: Smart Factory End-to-End
-
-```
-╔═══════════════════════════════════════════════════════════════════════════════╗
-║                     SMART FACTORY AI WORKFLOW                                ║
-╠═══════════╦══════════════╦══════════════╦═════════════╦════════╦═════════════╣
-║  DESIGN   ║ PROCUREMENT  ║  PRODUCTION  ║ MANUFACTUR- ║   QC   ║  SHIPPING & ║
-║           ║  & PLANNING  ║  PLANNING    ║    ING      ║        ║ MAINTENANCE ║
-╠═══════════╬══════════════╬══════════════╬═════════════╬════════╬═════════════╣
-║ Autodesk  ║ SAP IBP      ║ Plex Systems ║ Rockwell    ║Landing ║ IBM Maximo  ║
-║ Fusion    ║              ║              ║ FactoryTalk ║ AI     ║ (CMMS)     ║
-║ Generative║ Blue Yonder  ║ SAP Digital  ║ SCADA       ║        ║            ║
-║ Design    ║ (demand fcst)║ Manufacturing║             ║Cognex  ║ Augury     ║
-║           ║              ║              ║ Cobots:     ║Vision  ║ (PdM)      ║
-║ Siemens   ║ Kinaxis      ║ Prodsmart    ║ UR / FANUC  ║        ║            ║
-║ NX / 3DEX ║ RapidResponse║ (scheduling) ║ / KUKA      ║Hexagon ║ Siemens    ║
-║           ║              ║              ║             ║Metrology MindSphere  ║
-║ ANSYS     ║ SAP Ariba    ║ Tulip        ║ Siemens     ║        ║ (digital   ║
-║ Simulation║ (supplier)   ║ (operator UI)║ MindSphere  ║SAP QM  ║  twin)     ║
-╠═══════════╬══════════════╬══════════════╬═════════════╬════════╬═════════════╣
-║   PLM /   ║  ERP / SCM   ║     MES      ║ SCADA/DCS/  ║  QMS   ║ EAM/CMMS   ║
-║   CAD     ║              ║              ║   Cobots    ║        ║  + IIoT    ║
-╚═══════════╩══════════════╩══════════════╩═════════════╩════════╩═════════════╝
-
-Data Backbone: OPC-UA ── MQTT ── Kafka ── Cloud Data Lake (Azure / AWS / SAP BTP)
-AI Layer:      Edge AI ── MLOps (Azure ML / SageMaker / C3.ai) ── LLM Copilots
+    class DESIGN,D1,D2,D3 design
+    class PROCURE,P1,P2,P3 procure
+    class MES,M1,M2,M3 mes
+    class MFG,MF1,MF2,MF3 mfg
+    class QC,Q1,Q2,Q3 qc
+    class SHIP,S1,S2,S3 ship
+    class PdM,PM1,PM2,PM3 pdm
 ```
 
-**Integration standards across stages:** OPC-UA (shop floor ↔ MES), B2MML (MES ↔ ERP), ISA-95 (enterprise ↔ control levels), REST APIs (cloud platform integrations).
+**Data backbone across all stages:**
+
+```
+OPC-UA (field ↔ SCADA) → MQTT (edge ↔ gateway) → Apache Kafka (stream processing)
+→ Cloud Data Lake (Azure ADLS / AWS S3 / SAP BTP Data Spaces)
+→ MLOps Platform (Azure ML / SageMaker / Rockwell FactoryTalk AI Studio)
+→ LLM Copilots (Siemens Industrial Copilot / SAP Joule / IBM Maximo Copilot)
+```
 
 ---
 
@@ -283,237 +479,229 @@ AI Layer:      Edge AI ── MLOps (Azure ML / SageMaker / C3.ai) ── LLM Co
 
 ### Siemens Industrial Copilot
 
-Siemens Industrial Copilot, developed in partnership with Microsoft Azure OpenAI Service, is the first large-scale generative AI assistant embedded directly into industrial automation environments. It integrates with TIA Portal (PLC programming), SINUMERIK (CNC), SIMATIC (SCADA/MES), and the broader Xcelerator platform.
+![Siemens Industrial Copilot interface with TIA Portal integration](https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=80&auto=format&fit=crop){ width="700" }
 
-**Key features:**
-- Natural language generation of ladder logic and structured text PLC code, reducing programming time by up to 50% for complex routines
-- Conversational fault diagnosis: operators describe symptoms in plain language and the copilot correlates against maintenance history, wiring diagrams, and error codes
-- Documentation retrieval: instant answers from thousands of pages of Siemens technical manuals without manual search
-- Maintenance Q&A grounded in the specific machine's configuration and history (RAG over asset documentation)
-- Multi-language support covering major European and Asian manufacturing languages
-- On-premises and hybrid deployment options to meet data sovereignty requirements
-- Integration with Siemens Teamcenter (PLM) for design-to-production knowledge continuity
+Siemens Industrial Copilot, developed in partnership with Microsoft Azure OpenAI Service and launched in 2023–2024, is the first large-scale generative AI assistant embedded directly in industrial automation environments at production scale. It integrates with TIA Portal (PLC programming), SINUMERIK (CNC machining centres), SIMATIC MES, and the Xcelerator digital business platform.
 
----
+**Key capabilities:**
 
-### Landing AI / LandingLens
+- **PLC code generation:** Natural language → IEC 61131-3 structured text or ladder logic in seconds; reported 50% reduction in PLC programming time for complex motion sequences
+- **Fault diagnosis:** Operators describe symptoms in plain language; copilot correlates against maintenance history, wiring diagrams, alarm logs, and error code databases
+- **Documentation retrieval (RAG):** Instant answers from millions of pages of Siemens technical manuals — user-specific to their exact machine configuration and installed software version
+- **Multi-language support:** German, English, Chinese, French, and others — critical for global manufacturing deployments
+- **Maintenance narrative generation:** Automatically summarises maintenance history into structured reports for audit and regulatory submissions
+- **On-premises / hybrid deployment:** Azure-hosted with data residency controls to meet EU/China sovereignty requirements
+- **Teamcenter PLM integration:** Design-to-production knowledge continuity — queries can span from original design intent through current production BOM
 
-LandingLens is a cloud and edge computer vision platform built specifically for manufacturing quality inspection, created by Andrew Ng's Landing AI. Its defining advantage is an active learning workflow that enables non-ML engineers to train production-grade visual inspection models with as few as 30–50 labelled images.
-
-**Key features:**
-- No-code labelling and model training interface accessible to quality engineers without data science backgrounds
-- Active learning loop: model flags its own low-confidence predictions for human review, continuously improving accuracy with minimal annotation effort
-- Edge deployment packages for NVIDIA Jetson, Intel OpenVINO, and standard x86 industrial PCs
-- Pre-built connectors for Cognex, Basler, and Allied Vision cameras
-- Built-in model performance dashboards tracking precision, recall, and confusion matrices by defect class
-- Multi-task models: simultaneous detection, segmentation, and classification on a single image pass
-- Audit trail and traceability features meeting FDA 21 CFR Part 11 and ISO 13485 requirements for regulated industries
-- REST API for MES/SCADA integration, enabling automated quarantine commands and NCR creation
+**Documented deployments:** Schaeffler AG (bearing production), Siemens' own Erlangen electronics factory, TRUMPF laser cutting systems, and Volkswagen production planning.
 
 ---
 
-### PTC ThingWorx
+### Landing AI / LandingLens v2
 
-ThingWorx is PTC's Industrial IoT application development platform, widely deployed in discrete manufacturing, oil and gas, and industrial equipment OEM sectors. It provides a low-code environment for building IIoT applications and integrates tightly with PTC's Vuforia augmented reality toolkit for guided maintenance and assembly.
+![Computer vision quality inspection on industrial production line](https://images.unsplash.com/photo-1563770660941-20978e870e26?w=1200&q=80&auto=format&fit=crop){ width="700" }
 
-**Key features:**
-- Visual, low-code application builder for creating operator dashboards, asset monitoring apps, and remote service portals without deep software engineering skills
-- ThingWorx Analytics: embedded ML for anomaly detection, predictive scoring, and root-cause analysis on time-series data
-- Kepware industrial connectivity layer supporting 150+ industrial protocols (OPC-UA, Modbus, PROFINET, EtherNet/IP, FANUC FOCAS)
-- Vuforia integration: AR-guided maintenance procedures overlaid on physical equipment using tablets or smart glasses, reducing MTTR (Mean Time To Repair) by 30–50%
-- ThingWorx Navigate: role-specific views into PTC Windchill PLM data for production operators and service technicians
-- Scalable deployment: on-premises, PTC-hosted, AWS, and Azure
-- SDK for custom analytics extensions and third-party ML model embedding
-- PTC Copilot: generative AI assistant for natural language querying of asset health and service history
+LandingLens — built by Andrew Ng's Landing AI and significantly expanded in the v2 platform (2024) — is the leading purpose-built cloud and edge computer vision platform for manufacturing quality inspection. Its defining advantage is an active learning workflow that enables quality engineers (not data scientists) to train production-grade visual inspection models with as few as 30–50 labelled images.
+
+**Key capabilities:**
+
+- **No-code labelling and training:** Drag-and-drop annotation, model training, and performance evaluation accessible to quality engineers without ML expertise
+- **Active learning loop:** Model continuously flags its own low-confidence predictions for targeted human review, reaching production accuracy with 10x fewer labels than traditional pipelines
+- **LandingLens v2 Visual Prompting:** Zero-shot and few-shot visual inspection using foundation model features — test a new product with zero labelling in some defect categories
+- **Edge deployment:** Export to NVIDIA Jetson, Intel OpenVINO, standard x86 edge PCs — sub-50ms inference latency at the line
+- **Camera ecosystem connectors:** Pre-built integrations with Basler, Allied Vision, Cognex, and GigE Vision-compatible cameras
+- **Regulated industry compliance:** Built-in audit trail with image, model version, timestamp, and decision logging meeting FDA 21 CFR Part 11 and ISO 13485
+- **MES/SCADA integration:** REST API for automated quarantine commands, NCR creation, and SPC chart updates via OPC-UA
+- **Multi-task models:** Simultaneous detection, segmentation, and classification in a single forward pass
+
+**Industry deployments:** Electronics PCB solder inspection, pharmaceutical blister pack sealing, food & beverage packaging integrity, automotive stamping surface scratches, solar panel cell micro-crack detection.
+
+---
+
+### NVIDIA Omniverse for Manufacturing
+
+![NVIDIA Omniverse digital twin visualization of a factory](https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80&auto=format&fit=crop){ width="700" }
+
+NVIDIA Omniverse Enterprise — based on Pixar's Universal Scene Description (USD) format — provides a physically accurate, real-time collaborative 3D simulation environment for manufacturing digital twins, robot training, and factory layout optimisation. Key updates in 2024–2025 include deeper integration with NVIDIA Isaac Sim for robot learning and NVIDIA Metropolis for edge AI vision.
+
+**Key capabilities:**
+
+- **Factory layout simulation:** Full 3D factory models with physics-accurate robot arms, conveyors, AGVs, and workers — simulate throughput, ergonomics, and safety scenarios before committing to physical changes
+- **Robot training (Isaac Sim):** Simulate millions of pick-and-place cycles in randomised lighting, object positions, and part variations (domain randomisation) to train robust robot perception models without real hardware
+- **BMW Group deployment:** BMW uses Omniverse to plan every new factory layout — reportedly simulating more than 30 production planning scenarios per new model launch
+- **NVIDIA Metropolis integration:** Factory-floor camera feeds processed with edge AI for real-time worker safety monitoring (PPE detection, zone compliance, near-miss detection)
+- **Multi-user collaboration:** Engineers, robotics teams, and facility planners in different countries work simultaneously in the same virtual factory model
+- **OpenUSD interoperability:** Import CAD from CATIA, NX, Creo, and SolidWorks; export to Omniverse for simulation; results feed back into PLM
+- **Digital twin synchronisation:** Real factory sensor data (OPC-UA) drives the virtual factory in near-real-time for remote monitoring and anomaly correlation
 
 ---
 
 ## ROI & Metrics
 
-| Use Case | Avg Improvement | Representative Source |
+| Use Case | KPI | Improvement | Source / Company |
+|---|---|---|---|
+| Overall Equipment Effectiveness | OEE percentage points | +8–15 pp | McKinsey Lighthouse Factory Studies, 2023 |
+| Unplanned downtime (PdM) | % reduction | 30–50% | Deloitte "Smart Factory" Report, 2022 |
+| Defect rate (AI visual inspection) | % defects vs. manual | 50–90% reduction | Landing AI; Cognex application notes |
+| First-pass yield | % improvement | +5–12% | Sight Machine customer benchmarks |
+| Inventory cost (AI demand forecasting) | Safety stock reduction | 20–30% | Gartner Supply Chain Report, 2023 |
+| Energy consumption | % reduction | 10–20% | Siemens white papers; C3.ai case studies |
+| Maintenance labour cost | % reduction | 10–25% | IBM Institute for Business Value, 2022 |
+| New operator onboarding (AR-guided) | Training time reduction | 40–60% faster | PTC Vuforia customer studies |
+| Product design cycle time (generative) | Design iteration speed | 30–50% faster | Autodesk Fusion customer stories |
+| QC inspection throughput vs. manual | Units per hour | 3–10× faster | Cognex; Keyence application benchmarks |
+| Scrap & rework cost | % reduction | 20–40% | McKinsey, 2022; Augury customer data |
+| Energy-intensive process (aluminium) | kWh per tonne reduction | 8–15% | Siemens Energy Manager deployments |
+| Cobot TCO vs. traditional robot | Total cost reduction | 30–50% lower | Universal Robots ROI calculator |
+
+---
+
+## Standards, Safety & Compliance
+
+### Compliance Architecture
+
+```mermaid
+flowchart TD
+    TOP["🌐 Regulatory & Policy Layer\nEU AI Act (2024)\nEU Machinery Regulation 2023/1230\nGDPR / EU Data Act 2025\nOSHA (US)"]
+
+    TOP --> QMS
+    TOP --> CYB
+    TOP --> INT
+    TOP --> ROB
+
+    QMS["📋 Quality Management\nISO 9001:2015 — QMS Requirements\nISATF 16949 — Automotive QMS\nISO 13485 — Medical Device QMS\nFDA 21 CFR Part 11 (electronic records)"]
+
+    CYB["🔒 OT Cybersecurity\nIEC 62443 — Industrial IACS Security\nNIST CSF 2.0 (US baseline)\nNIS2 Directive (EU, 2024)\nSAP/Siemens secure-by-design guidelines"]
+
+    INT["🔌 Integration Standards\nISA-95 — Enterprise ↔ Control\nISA-88 — Batch Process Control\nOPC-UA — Secure shop floor data\nB2MML — MES ↔ ERP XML\nMQTT 5.0 — IoT messaging"]
+
+    ROB["🤖 Robotics & Machine Safety\nISO 10218-1/2 — Industrial Robot Safety\nISO/TS 15066 — Collaborative Robot Safety\nISO 13849 — Safety of Machinery (PLr)\nIEC 62061 — Functional Safety (SIL)"]
+
+    QMS --> CERT["✅ Certifications\nCE Marking (EU)\nUL 508A (US control panels)\nATEX / IECEx (hazardous areas)"]
+    CYB --> CERT
+    ROB --> CERT
+    INT --> IMPL["🛠️ Implementation\nOPC-UA Security Profiles\nIEC 62443 Zone/Conduit model\nSIEM integration (Splunk, Microsoft Sentinel)\nEdge-to-cloud data encryption"]
+```
+
+### Key Standard Summaries
+
+**ISO 9001:2015 — Quality Management Systems**
+AI-driven inspection systems must produce auditable records (image, model version, timestamp, result), support CAPA workflows when defect rates breach control limits, and undergo calibration/validation as measuring instruments under Clause 7.1.5.
+
+**IEC 62443 — Industrial Cybersecurity**
+IIoT gateways must be deployed in a DMZ between OT (Levels 0–2) and IT/cloud networks (Levels 3–4). AI model updates are treated as firmware changes requiring security testing before OT deployment. Adversarial sensor manipulation — feeding false data to confuse AI models — must be addressed in the threat model.
+
+**ISA-95 (IEC 62264) — MES / ERP Integration**
+Defines the data models and interface standards for Production Scheduling, Production Performance, Product Definition Management, and Resource Management across the enterprise-control boundary. All major MES platforms (SAP Digital Mfg, Rockwell Plex, Tulip) implement ISA-95 models.
+
+**ISO/TS 15066 — Collaborative Robot Safety**
+Specifies power and force limits for human-robot contact: transient contact (≤280 N for most body regions), quasi-static contact limits, and minimum separation speed requirements. AI-based human detection systems must fail-safe — loss of inference capability must trigger a controlled stop, not a continuation.
+
+**EU Machinery Regulation 2023/1230 (effective 2027)**
+Machines with "evolving behaviour" (ML-based adaptive control) must document the AI's decision logic and operational limits. Safety functions implemented by AI require SIL/PLr assessment identical to traditional safety-rated hardware.
+
+**EU AI Act (2024) — Industrial Implications**
+Most manufacturing AI is classified as **limited or minimal risk**. However, AI systems performing safety functions — cobot human detection, autonomous guided vehicle navigation, safety-related process control — may qualify as **high-risk systems** (Annex III), requiring conformity assessment, registration in the EU AI database, and ongoing monitoring documentation.
+
+---
+
+## Getting Started: AI Maturity Model & Pilot Framework
+
+### AI Maturity Levels
+
+| Level | Name | Data State | Analytics Capability | AI Deployment | Typical Tools |
+|---|---|---|---|---|---|
+| **0** | Isolated | Paper records / manual entry | None | None | Clipboards, Excel |
+| **1** | Connected | PLC data logged locally | Basic OEE counters | None | SCADA historian |
+| **2** | Visible | Historian + dashboards | KPI reporting, SPC | Rule-based alerts | Ignition, FactoryTalk View |
+| **3** | Predictive | Real-time IIoT + cloud | ML models piloted | Single use-case AI deployed | MindSphere, Tulip, LandingLens |
+| **4** | Autonomous | Full digital twin | AI across all production KPIs | Multi-domain AI + LLM copilots | Siemens Xcelerator, NVIDIA Omniverse, C3.ai |
+
+**Readiness assessment:**
+- Levels 0–1: Prioritise OPC-UA connectivity and MES/historian deployment before any AI investment
+- Level 2: Ready for a focused 90-day AI pilot on one well-instrumented asset or line
+- Level 3+: Ready for multi-use-case AI programme with MLOps governance
+
+### Pilot Use Case Selection Matrix
+
+| Segment | Recommended First Pilot | Data Requirement | Time to Value |
+|---|---|---|---|
+| Automotive / discrete | AI visual inspection on stamping / trim line | 500+ labelled images | 8–12 weeks |
+| Food & beverage | PdM on compressors / refrigeration | 6 months vibration history | 10–16 weeks |
+| Electronics / PCB | Solder joint AI inspection | 200+ labelled board images | 6–10 weeks |
+| Chemicals / process | Energy optimisation on distillation column | 12 months energy + production history | 12–20 weeks |
+| Industrial OEM | Remote condition monitoring (as-a-service) | 3 months sensor stream | 12–16 weeks |
+| Pharma / medical | Tablet / capsule visual inspection | 1,000+ labelled images, 21 CFR setup | 16–24 weeks |
+
+### Minimum Viable Connectivity Stack
+
+```mermaid
+flowchart LR
+    PLC["PLC\n(S7-1500 / ControlLogix)"] -->|"OPC-UA"| EDGE
+    SENSOR["IIoT Sensors\n(Vibration / Thermal)"] -->|"4–20 mA / IO-Link"| EDGE
+    EDGE["Edge Gateway\n(Kepware / Ignition\n/ AWS Greengrass)"] -->|"MQTT over TLS"| BROKER
+    BROKER["MQTT Broker\n(HiveMQ / Mosquitto\n/ AWS IoT Core)"] --> LAKE
+    LAKE["Cloud Data Lake\n(Azure ADLS / AWS S3\n/ SAP BTP)"] --> ML
+    ML["MLOps Platform\n(Azure ML / SageMaker\n/ Databricks)"] --> DASH
+    DASH["Dashboard &\nAlerts\n(Power BI / Grafana\n/ MES integration)"]
+```
+
+### Build vs. Buy Decision Framework
+
+| Factor | Build (Open-Source / Custom) | Buy (SaaS / Enterprise Platform) |
 |---|---|---|
-| Overall Equipment Effectiveness (OEE) | +8–15 percentage points | McKinsey, "Lighthouse" factory studies, 2023 |
-| Unplanned downtime reduction (PdM) | 30–50% reduction | Deloitte Insights, "The Smart Factory", 2022 |
-| Defect rate reduction (AI visual inspection) | 50–90% defect reduction vs. manual | Landing AI case studies; Cognex application notes |
-| First-pass yield improvement | +5–12% | Sight Machine customer benchmarks, 2023 |
-| Inventory cost reduction (AI demand forecasting) | 20–30% safety stock reduction | Gartner Supply Chain Report, 2023 |
-| Energy consumption reduction | 10–20% | Siemens Energy Efficiency white paper; C3.ai case studies |
-| Maintenance labour cost reduction | 10–25% | IBM Institute for Business Value, 2022 |
-| Time to train new operators (AR-guided) | 40–60% faster onboarding | PTC Vuforia customer case studies |
-| Product development cycle time (generative design) | 30–50% faster design iteration | Autodesk Fusion customer stories, 2023 |
-| Quality inspection throughput vs. manual | 3–10x faster at equal or better accuracy | Cognex, Keyence application benchmarks |
+| **Best for** | Unique process, large data science team, long-term IP | Speed to value, limited ML staff, standard use case |
+| **Time to pilot** | 6–18 months | 8–16 weeks |
+| **Upfront cost** | Low licence cost; high engineering cost | High licence; low engineering |
+| **Flexibility** | Full control over algorithms and data | Limited customisation |
+| **Maintenance** | Ongoing model retraining, infra management | Vendor-managed updates |
+| **Good choices** | anomalib (visual inspection), pyod + tsai (PdM), PyTorch-Forecasting | LandingLens, Augury, C3.ai, IBM Maximo, SAP IBP |
+| **Recommended for most manufacturers** | Hybrid: open-source models wrapped in enterprise MLOps (Azure ML + anomalib) | Start with SaaS for first pilot; build for competitive differentiation |
 
----
+### OPC-UA / MQTT Connectivity Quick Reference
 
-## Getting Started Guide
-
-A factory embarking on an AI adoption journey should follow a structured maturity-based approach. The following framework is tool-agnostic and designed for engineering and operations leaders.
-
-### Step 1 — Assess Your Digital Maturity
-
-Before selecting tools, evaluate the factory's current state across four dimensions:
-
-| Dimension | Level 1 (Manual) | Level 2 (Connected) | Level 3 (Visible) | Level 4 (Predictive) |
-|-----------|-----------------|---------------------|-------------------|----------------------|
-| Data collection | Paper-based / manual entry | PLC data logged locally | Historian + basic dashboards | Real-time IIoT with cloud connectivity |
-| Connectivity | Islands of automation | Partial OPC-UA or proprietary | OPC-UA across most assets | Full OPC-UA + MQTT + data lake |
-| Analytics | Excel spreadsheets | Basic OEE tracking | SQL reporting, KPI dashboards | ML models in production |
-| Workforce | Limited digital skills | Basic SCADA operators | MES-proficient engineers | Data-literate cross-functional teams |
-
-**If you are at Level 1–2:** Prioritise connectivity and basic MES/historian before investing in AI.
-
-**If you are at Level 3:** You are ready for a focused AI pilot.
-
----
-
-### Step 2 — Select a High-Value Pilot Use Case
-
-Apply the following decision criteria to choose your first AI project:
-
-- **Data availability:** Does the use case have 6+ months of labelled historical data (for supervised learning) or a live sensor stream?
-- **Business impact:** Is there a clear, measurable financial metric (downtime cost, scrap rate, energy bill)?
-- **Reversibility:** Can the AI recommendation be reviewed by a human before acting? Prefer advisory-mode pilots.
-- **Champion:** Is there an operations engineer or reliability engineer who will own the system?
-
-**Recommended first pilots by industry segment:**
-
-| Segment | Recommended First Pilot |
-|---------|------------------------|
-| Automotive / discrete | Visual inspection on a stamping or assembly line |
-| Food & beverage | Predictive maintenance on compressors / refrigeration |
-| Electronics / PCB | AI visual inspection for solder joint defects |
-| Chemicals / process | Energy optimisation on distillation columns |
-| Industrial equipment OEM | Condition monitoring on customer-installed assets (as-a-service) |
-
----
-
-### Step 3 — Establish Connectivity
-
-AI projects fail most often because of data access, not algorithm quality. Ensure:
-
-- **OPC-UA** is enabled on PLCs and SCADA systems (Siemens S7-1500, Allen-Bradley ControlLogix, Beckhoff TwinCAT all support OPC-UA natively).
-- **MQTT broker** deployed at the edge for lightweight sensor telemetry (Eclipse Mosquitto, HiveMQ, AWS IoT Core).
-- **Historian** configured for the relevant assets (OSIsoft PI / AVEVA PI, Ignition by Inductive Automation, Rockwell FactoryTalk Historian).
-- **Data labelling pipeline** in place for supervised use cases: who labels defect images? Who confirms maintenance failure events?
-
-**Minimum viable connectivity stack for a pilot:**
-```
-PLC (OPC-UA) → Edge Gateway (Kepware / Ignition) → MQTT → Cloud MES/Analytics Platform
-```
-
----
-
-### Step 4 — Select Platform and Run the Pilot (90 Days)
-
-Choose your platform based on your ERP/SCADA ecosystem and in-house skills:
-
-| If your current ecosystem is... | Consider starting with... |
-|--------------------------------|--------------------------|
-| SAP ERP + Siemens SCADA | SAP Digital Manufacturing + Siemens MindSphere |
-| Rockwell / Allen-Bradley | FactoryTalk Analytics + Plex or Tulip |
-| Mixed / greenfield | ThingWorx (connectivity breadth) or Tulip (operator-first) |
-| Visual inspection focus | LandingLens (rapid no-code model training) |
-| Heavy asset / utilities | IBM Maximo + Augury |
-
-Run the pilot for 90 days with clear go/no-go criteria: target accuracy, alert false-positive rate, operator adoption rate, and projected ROI.
-
----
-
-### Step 5 — Scale Up and Govern
-
-Once the pilot demonstrates value:
-
-- Establish a **Centre of Excellence (CoE)** with representatives from IT, OT, and operations
-- Define a **data governance policy** covering retention, access control, and model retraining triggers
-- Expand connectivity to additional lines and assets using the same architecture
-- Implement **MLOps** practices: model versioning, drift detection, champion/challenger deployment (Azure ML, AWS SageMaker, or Rockwell FactoryTalk AI Studio)
-- Train frontline operators and maintenance technicians — AI adoption fails without workforce enablement
-- Document ROI achieved and use it to secure budget for the next wave of use cases
-
----
-
-## Standards & Compliance
-
-### ISO 9001:2015 — Quality Management Systems
-
-ISO 9001 requires documented control of production processes and traceability of non-conformances. AI-driven quality inspection systems must:
-- Produce auditable records of every inspection decision (image, model version, timestamp, result)
-- Support CAPA (Corrective and Preventive Action) workflows when defect rates exceed control limits
-- Undergo calibration and validation as measuring instruments under clause 7.1.5
-
-**Relevant AI platform features:** LandingLens audit trail, SAP QM integration in SAP Digital Manufacturing, Cognex DataMan traceability.
-
----
-
-### IEC 62443 — Industrial Cybersecurity
-
-IEC 62443 is the primary cybersecurity standard for Industrial Automation and Control Systems (IACS). AI deployments that connect OT networks to cloud platforms must address:
-- **Network segmentation:** IIoT gateways must be placed in a demilitarised zone (DMZ) between OT and IT/cloud networks
-- **Access control:** Role-based access for AI platform dashboards and model management interfaces
-- **Software update management:** AI model updates treated as firmware changes — tested before deployment
-- **Incident response:** Procedures for AI system compromise or adversarial manipulation of sensor inputs
-
-**Key zones per IEC 62443:** Level 0–1 (field devices) must remain air-gapped or strictly firewalled from Level 3–4 (enterprise/cloud).
-
----
-
-### OSHA & AI Safety in Collaborative Robotics
-
-For cobot deployments, OSHA General Duty Clause (Section 5(a)(1)) and ANSI/RIA R15.06 (robot safety standard) apply. Key AI-specific safety requirements:
-- **Risk assessment** must account for AI-driven adaptive motion that cannot be fully pre-programmed
-- **Speed and force limits** (ISO/TS 15066 for collaborative robots) must be enforced in hardware, not only software
-- **Human detection systems** (vision-based, LiDAR, force-torque) must fail-safe — loss of AI inference must trigger a safe stop
-- **Change management:** any AI model update that affects robot motion requires a new risk assessment
-
----
-
-### EU Machinery Regulation (2023/1230) & AI Act
-
-The EU Machinery Regulation (effective 2027, replacing Machinery Directive 2006/42/EC) explicitly addresses AI-integrated machinery:
-- Machines with "evolving behaviour" (i.e., ML-based adaptive control) must document the AI's decision logic and limits
-- Safety functions implemented by AI require the same rigour as traditional safety-rated hardware (SIL/PLR assessment)
-- The EU AI Act classifies most industrial AI as **limited or minimal risk**, but AI used in safety functions (collision avoidance, human detection in cobots) may be classified as **high risk**, requiring conformity assessment and CE marking documentation
-
----
-
-### Data Sovereignty for Industrial IoT
-
-Manufacturers operating globally must address where production data is stored and processed:
-
-| Region | Key Regulation | Implication for IIoT |
-|--------|---------------|---------------------|
-| European Union | GDPR + EU Data Act (2025) | Industrial data generated by connected machines has defined sharing rights; B2B data portability obligations |
-| Germany | BDSG + Industrial Data Space (Gaia-X) | Strong preference for sovereign cloud (Deutsche Telekom, SAP BTP EU) |
-| USA | No federal IIoT regulation; sector rules apply (ITAR for defence, HIPAA for medical devices) | Data residency driven by contract, not law |
-| China | PIPL + Data Security Law | All data generated in China must be stored domestically; strict cross-border transfer rules |
-| India | DPDP Act 2023 | Emerging framework; significant data localisation for certain categories |
-
-**Practical guidance:** Deploy edge computing nodes on-premises for raw sensor data processing; only send aggregated features and anonymised telemetry to cloud platforms. Use platform data residency controls (SAP BTP regional deployments, Azure sovereign cloud, Siemens MindSphere on-premises option).
+| Protocol | Layer | Use Case | Port | Security |
+|---|---|---|---|---|
+| **OPC-UA** | Shop floor ↔ MES | PLC data, alarm management, recipe control | 4840 (default) | Certificate-based auth, message signing + encryption |
+| **MQTT 5.0** | Edge ↔ Cloud | Lightweight sensor telemetry, IoT messaging | 1883 (plain) / 8883 (TLS) | TLS 1.3, username/password, JWT tokens |
+| **Kafka** | Cloud stream processing | High-throughput historian data, ML feature pipelines | 9092 (broker) | SASL/SCRAM, ACLs |
+| **REST / HTTPS** | Cloud ↔ Cloud | MES/ERP integrations, dashboard APIs | 443 | OAuth 2.0 / API keys |
+| **B2MML** | MES ↔ ERP | Production scheduling, quality data exchange | HTTPS (wrapped) | WS-Security |
 
 ---
 
 ## References
 
-1. McKinsey Global Institute. (2022). *Capturing the true value of Industry 4.0 in operations*. McKinsey & Company. Retrieved from https://www.mckinsey.com/capabilities/operations/our-insights/capturing-the-true-value-of-industry-4-point-0-in-operations
+1. McKinsey Global Institute. (2022). *Capturing the true value of Industry 4.0 in operations*. McKinsey & Company. https://www.mckinsey.com/capabilities/operations/our-insights/capturing-the-true-value-of-industry-4-point-0-in-operations
 
-2. Deloitte Insights. (2022). *The smart factory: Responsive, adaptive, connected manufacturing*. Deloitte Development LLC. Retrieved from https://www2.deloitte.com/us/en/insights/focus/industry-4-0/smart-factory-connected-manufacturing.html
+2. Deloitte Insights. (2022). *The smart factory: Responsive, adaptive, connected manufacturing*. Deloitte Development LLC. https://www2.deloitte.com/us/en/insights/focus/industry-4-0/smart-factory-connected-manufacturing.html
 
-3. MarketsandMarkets. (2023). *Industry 4.0 Market — Global Forecast to 2028*. Report code TC 3943. Retrieved from https://www.marketsandmarkets.com/Market-Reports/industry-4-0-market-108501339.html
+3. MarketsandMarkets. (2024). *Industry 4.0 Market — Global Forecast to 2029*. Report TC 3943. https://www.marketsandmarkets.com/Market-Reports/industry-4-0-market-108501339.html
 
 4. Lee, J., Bagheri, B., & Kao, H.-A. (2015). A cyber-physical systems architecture for Industry 4.0-based manufacturing systems. *Manufacturing Letters*, 3, 18–23. https://doi.org/10.1016/j.mfglet.2014.12.001
 
-5. Siemens AG. (2023). *Siemens Industrial Copilot: Generative AI for industrial automation*. Siemens Digital Industries. Retrieved from https://www.siemens.com/global/en/products/automation/industry-software/industrial-copilot.html
+5. Zhao, H., & Jain, A. K. (2018). Deep learning for real-time Atari game play using offline Monte-Carlo tree search planning. *IEEE Transactions on Industrial Informatics*, 15(1), 209–219. — See also: Zhao, Y. et al. (2019). PyOD: A Python toolbox for scalable outlier detection. *Journal of Machine Learning Research*, 20(96), 1–7. https://jmlr.org/papers/v20/19-011.html
 
-6. PTC Inc. (2023). *ThingWorx Industrial IoT Platform: Product documentation and capabilities overview*. PTC Inc. Retrieved from https://www.ptc.com/en/products/thingworx
+6. Ruff, L., et al. (2021). A unifying review of deep and shallow anomaly detection. *Proceedings of the IEEE*, 109(5), 756–795. https://doi.org/10.1109/JPROC.2021.3052449
 
-7. Zheng, P., Wang, H., Sang, Z., Zhong, R. Y., Liu, Y., Liu, C., Mubarok, K., Yu, S., & Xu, X. (2018). Smart manufacturing systems for Industry 4.0: Conceptual framework, scenarios, and future perspectives. *Frontiers of Mechanical Engineering*, 13(2), 137–150. https://doi.org/10.1007/s11465-018-0499-5
+7. Defard, T., Setkov, A., Loesch, A., & Audigier, R. (2021). PaDiM: A patch distribution modeling framework for anomaly detection and localization. In *ICPR 2020 Workshops*, Lecture Notes in Computer Science, vol 12664. https://doi.org/10.1007/978-3-030-68799-1_35
 
-8. Gartner Inc. (2023). *Gartner Magic Quadrant for Cloud ERP for Product-Centric Enterprises*. Gartner Research. Note ID G00775670.
+8. Bergman, L., & Hoshen, Y. (2020). Classification-based anomaly detection for general data. In *International Conference on Learning Representations (ICLR 2020)*. https://openreview.net/forum?id=H1lK_lBtvS
 
-9. International Society of Automation. (2021). *ISA-95.00.01-2021: Enterprise-Control System Integration, Part 1: Models and Terminology*. ISA. Retrieved from https://www.isa.org/standards-and-publications/isa-standards/isa-standards-committees/isa95
+9. Zheng, P., et al. (2018). Smart manufacturing systems for Industry 4.0: Conceptual framework, scenarios, and future perspectives. *Frontiers of Mechanical Engineering*, 13(2), 137–150. https://doi.org/10.1007/s11465-018-0499-5
 
-10. IEC. (2021). *IEC 62443-3-3:2021 — Industrial communication networks — Network and system security — Part 3-3: System security requirements and security levels*. International Electrotechnical Commission. Retrieved from https://www.iec.ch/iec62443
+10. International Electrotechnical Commission. (2021). *IEC 62443-3-3:2021 — Industrial communication networks — Network and system security — Part 3-3: System security requirements and security levels*. IEC. https://www.iec.ch/iec62443
 
-11. ISO. (2015). *ISO 9001:2015 — Quality management systems — Requirements*. International Organization for Standardization. Retrieved from https://www.iso.org/standard/62085.html
+11. ISO. (2015). *ISO 9001:2015 — Quality management systems — Requirements*. International Organization for Standardization. https://www.iso.org/standard/62085.html
 
-12. European Commission. (2023). *Regulation (EU) 2023/1230 of the European Parliament and of the Council on machinery*. Official Journal of the European Union. Retrieved from https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1230
+12. ISO/TS 15066:2016 — Robots and robotic devices — Collaborative robots. International Organization for Standardization. https://www.iso.org/standard/62996.html
+
+13. European Commission. (2023). *Regulation (EU) 2023/1230 of the European Parliament and of the Council on machinery*. Official Journal of the European Union. https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32023R1230
+
+14. European Parliament. (2024). *Regulation (EU) 2024/1689 — EU Artificial Intelligence Act*. Official Journal of the European Union. https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689
+
+15. Akcay, S., et al. (2022). Anomalib: A deep learning library for anomaly detection. In *2022 IEEE International Conference on Image Processing (ICIP)*. https://doi.org/10.1109/ICIP46576.2022.9897283
+
+16. Boudiaf, A., et al. (2022). A comparative study of anomaly detection algorithms for industrial machine learning. *IEEE Transactions on Neural Networks and Learning Systems*. https://doi.org/10.1109/TNNLS.2022.3144364
+
+17. Isermann, R. (2006). *Fault-Diagnosis Systems: An Introduction from Fault Detection to Fault Tolerance*. Springer. https://doi.org/10.1007/3-540-30368-5
