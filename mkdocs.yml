@@ -153,6 +153,14 @@ nav:
     - AI Agents: llm/agents.md
     - Vector Databases: llm/vector-databases.md
 
+  - Agentic AI:
+    - Overview: agents/index.md
+    - Agent Fundamentals: agents/fundamentals.md
+    - No-Code Tools (Zapier, n8n, Make): agents/no-code-tools.md
+    - LangChain & LangGraph: agents/langchain-langgraph.md
+    - Agent Frameworks: agents/frameworks.md
+    - Multi-Agent Systems: agents/multi-agent-systems.md
+
   - Generative AI:
     - generative-ai/index.md
     - Diffusion Models: generative-ai/diffusion-models.md
